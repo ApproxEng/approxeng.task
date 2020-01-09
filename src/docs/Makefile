@@ -59,7 +59,7 @@ html:
 push:
 	cd $(BUILDDIR)/html; git add . ; git commit -m "rebuilt docs"; git push origin gh-pages
 	@echo
-	@echo "Pushed docs to https://approxeng.github.io/approxeng.input/index.html"
+	@echo "Pushed docs to https://approxeng.github.io/approxeng.task/index.html"
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
