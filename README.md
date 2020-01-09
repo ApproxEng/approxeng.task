@@ -5,3 +5,5 @@ glue together the various software components needed by a typical robot without 
 regret later.
 
 Documentation is available at https://approxeng.github.io/approxeng.task
+
+Note - early stages, packages may not be in PyPi, docs may not be uploaded...
