@@ -1,0 +1,520 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; Approximate Engineering - Task 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Approximate Engineering - Task 0.0.1 documentation"
+          href="_static/opensearch.xml"/>
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Simple Usage" href="simpleusage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Approximate Engineering - Task
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simpleusage.html">Simple Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Approximate Engineering - Task</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-approxeng.task">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-approxeng.task" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="approxeng.task.ExitTask">
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">ExitTask</code><a class="reference internal" href="_modules/approxeng/task.html#ExitTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch control to this task to exit the task loop. Registered with the name ‘exit’ for convenience</p>
+<dl class="method">
+<dt id="approxeng.task.ExitTask.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#ExitTask.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name used internally by this task</p></li>
+<li><p><strong>resources</strong> – A string, or list of strings, containing names of resources which must be available for this task to
+function. Any such resources will be initialised and shutdown alongside the task itself. If this is
+set to None then all resources registered will be available, otherwise only those explicitly named here
+will be accessible from the task logic.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.ExitTask.shutdown">
+<code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#ExitTask.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement to provide shutdown logic for the task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.ExitTask.startup">
+<code class="sig-name descname">startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#ExitTask.startup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask.startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement to provide startup logic for the task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.ExitTask.tick">
+<code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#ExitTask.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called every tick, do your stuff here!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> – A world object, access any required resources through properties on this object.</p></li>
+<li><p><strong>count</strong> – The global tick count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Used to signal what to do at the end of the tick:
+None - continue, call the same task again
+True - exit from the task loop. Probably don’t do this, instead…
+…String or Task - shut this task down and set the specified task (name or direct reference) to be the
+active one. If you want to exit the best way to do so is to delegate to the exit task, or to a custom task
+which gracefully shuts down your hardware before exiting from the loop.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="approxeng.task.Resource">
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">Resource</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract base class for resources, things which are used by tasks and which may have a lifecycle. When a new task
+is started, any resources the task requires are started. On each task tick the value method is called on each
+resource and is used to populate the world dict passed to the task function. When the task is shut down each
+resource has its shutdown function called.</p>
+<dl class="method">
+<dt id="approxeng.task.Resource.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Resource.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Resource.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="approxeng.task.SimpleResource">
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">SimpleResource</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value_func</em>, <em class="sig-param">startup_func=None</em>, <em class="sig-param">shutdown_func=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple resource constructed with value, and optional setup / teardown functions. All these functions should be
+no-argument ones.</p>
+<dl class="method">
+<dt id="approxeng.task.SimpleResource.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value_func</em>, <em class="sig-param">startup_func=None</em>, <em class="sig-param">shutdown_func=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleResource.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleResource.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="approxeng.task.SimpleTask">
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">SimpleTask</code><span class="sig-paren">(</span><em class="sig-param">task_function</em>, <em class="sig-param">resources</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that wraps a single task function, including basic state consisting of an initially blank dict that
+the task can safely write to and read from for the duration of the run.</p>
+<p>The function wrapped by the task can accept any or all of the following parameters:</p>
+<p>state : passed the state dict, persists across multiple calls within a task session.
+world : passed the world state, consisting of a set of named resources as requested by the task specification.
+count : monotonically ascending tick count across the entire application.</p>
+<dl class="method">
+<dt id="approxeng.task.SimpleTask.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">task_function</em>, <em class="sig-param">resources</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new simple task instance, this is generally going to be called from within the library when wrapping
+a task function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_function</strong> – A function, which may accept any or all of [state, world, count] parameters, and which will be called every
+tick while this task is active.</p></li>
+<li><p><strong>resources</strong> – A list of named resources to be supplied through the world parameter to the task function.</p></li>
+<li><p><strong>name</strong> – The name of the task, this is only really used internally for logging, the canonical name is defined by the
+key under which the task is registered.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.SimpleTask.shutdown">
+<code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the state dict</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.SimpleTask.startup">
+<code class="sig-name descname">startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask.startup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask.startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear the state dict, this should never be needed but doesn’t hurt to check</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.SimpleTask.tick">
+<code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>A single task tick. Calls the task function, supplying it with whatever parameters it needs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> – World state, set of resources accessible as properties.</p></li>
+<li><p><strong>count</strong> – Global tick counter, increases by 1 each time</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The return value from the task function. As elsewhere, this is interpreted as follows:
+None - don’t change anything, keep this task running, call it again
+True - exit from the task processing loop, shutting down the process
+Task or String - shut this task down, set the named or provided task as the current task</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="approxeng.task.Task">
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">Task</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract base class for tasks, things which are called repeatedly to perform some higher function.</p>
+<dl class="class">
+<dt id="approxeng.task.Task.World">
+<em class="property">class </em><code class="sig-name descname">World</code><span class="sig-paren">(</span><em class="sig-param">resources</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.World"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.World" title="Permalink to this definition">¶</a></dt>
+<dd><p>The world that the task tick sees, consists of all resources the task said it needed.</p>
+<dl class="method">
+<dt id="approxeng.task.Task.World.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">resources</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.World.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.World.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.Task.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name used internally by this task</p></li>
+<li><p><strong>resources</strong> – A string, or list of strings, containing names of resources which must be available for this task to
+function. Any such resources will be initialised and shutdown alongside the task itself. If this is
+set to None then all resources registered will be available, otherwise only those explicitly named here
+will be accessible from the task logic.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.Task.do_shutdown">
+<code class="sig-name descname">do_shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.do_shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.do_shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this task is active, shut it down, then call shutdown on all resources.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.Task.do_startup">
+<code class="sig-name descname">do_startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.do_startup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.do_startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this task is not currently active, call startup on any required resources, then call startup on the task
+implementation. No need to call this explicitly as it’s called if the task isn’t active on the first tick.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.Task.do_tick">
+<code class="sig-name descname">do_tick</code><span class="sig-paren">(</span><em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.do_tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.do_tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start up the task, if needed, then call the tick method, passing in the world and tick count.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.Task.resources">
+<em class="property">property </em><code class="sig-name descname">resources</code><a class="headerlink" href="#approxeng.task.Task.resources" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of names of resources needed by this task, if this was originally set to None then this returns a list
+containing all the registered resource names.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.Task.shutdown">
+<em class="property">abstract </em><code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement to provide shutdown logic for the task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.Task.startup">
+<em class="property">abstract </em><code class="sig-name descname">startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.startup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement to provide startup logic for the task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.Task.tick">
+<em class="property">abstract </em><code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called every tick, do your stuff here!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> – A world object, access any required resources through properties on this object.</p></li>
+<li><p><strong>count</strong> – The global tick count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Used to signal what to do at the end of the tick:
+None - continue, call the same task again
+True - exit from the task loop. Probably don’t do this, instead…
+…String or Task - shut this task down and set the specified task (name or direct reference) to be the
+active one. If you want to exit the best way to do so is to delegate to the exit task, or to a custom task
+which gracefully shuts down your hardware before exiting from the loop.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="approxeng.task.TaskException">
+<em class="property">exception </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">TaskException</code><a class="reference internal" href="_modules/approxeng/task.html#TaskException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.TaskException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="approxeng.task.register_resource">
+<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">register_resource</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#register_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.register_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly register a value as a resource. If the value is a function then wrap it up as the value() method of a
+resource class instance. If it is already a resource class instance just register it. If it’s a plain static value
+then wrap it in a function that always returns that value, then wrap that up in the simple class.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="approxeng.task.register_task">
+<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">register_task</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#register_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.register_task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly register a task, either from a function or from an instance of Task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name used to reference the task</p></li>
+<li><p><strong>value</strong> – Either a task function, in which case this behaves as if the function were annotated with &#64;task, or a Task
+object. You may want to use the latter, more verbose, form if extensive setup or custom state handling is
+needed by your task, although in general most of such handling should be done with resources and tasks
+themselves should remain largely state free.</p></li>
+<li><p><strong>resources</strong> – A string, or list of strings, containing the names of resources required for this task to run. These resources
+will be initialised at the same time as the task itself, and shut down alongside it where appropriate. They are
+accessible from the world object passed to the tick function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="approxeng.task.resource">
+<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">resource</code><span class="sig-paren">(</span><em class="sig-param">_func=None</em>, <em class="sig-param">*</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to indicate that a function produces a resource. If the resource is a static value you should probably
+use the register_resource instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="approxeng.task.run">
+<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">root_task</em>, <em class="sig-param">error_task='exit'</em>, <em class="sig-param">check_tasks=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the task loop!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root_task</strong> – The first task to start with</p></li>
+<li><p><strong>error_task</strong> – The task to switch to if an exception occurs, defaults to the ExitTask to exit the loop. If you have hardware
+such as motors that you need to ensure is deactivated, the best approach is to have a task that only does
+hardware shutdown, handles any errors with that process internally, and then delegates to the exit task to
+stop the task look.</p></li>
+<li><p><strong>check_tasks</strong> – A sequence of functions which will be called before each tick of the selected task. If any of them return
+then the return value is used instead of calling and using the value of the task’s tick. This can be done
+to handle cases like ‘make the home button always jump back to the root task’, or ‘exit the task loop on
+low battery conditions’ or similar. Don’t put too much logic here, it’ll get called every tick. Also good for
+cases where you absolutely want to bail if hardware isn’t available (joystick out of range is a particular case)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="approxeng.task.task">
+<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">task</code><span class="sig-paren">(</span><em class="sig-param">_func=None</em>, <em class="sig-param">*</em>, <em class="sig-param">name=None</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to indicate that a function is a simple task. The function will be registered, using either the
+name if explicitly provided, or the name of the function otherwise.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="simpleusage.html" class="btn btn-neutral float-left" title="Simple Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, 2020 Tom Oinn
+      <span class="lastupdated">
+        Last updated on Jan 09, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

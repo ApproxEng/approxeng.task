@@ -1,0 +1,630 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>approxeng.task &mdash; Approximate Engineering - Task 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Approximate Engineering - Task 0.0.1 documentation"
+          href="../../_static/opensearch.xml"/>
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Approximate Engineering - Task
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Change Log</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simpleusage.html">Simple Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Approximate Engineering - Task</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>approxeng.task</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for approxeng.task</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">types</span>
+
+<span class="n">TASKS</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">RESOURCES</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="n">LOG</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;approxeng.task&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="task"><a class="viewcode-back" href="../../api.html#approxeng.task.task">[docs]</a><span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decorator to indicate that a function is a simple task. The function will be registered, using either the</span>
+<span class="sd">    name if explicitly provided, or the name of the function otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Called with no name argument</span>
+        <span class="n">register_task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">_func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">_func</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_func</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Called with an explicit argument, use this to register it</span>
+        <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+            <span class="n">task_name</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">func</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">register_task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">task_name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">func</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">func</span>
+
+        <span class="k">return</span> <span class="n">decorator</span></div>
+
+
+<div class="viewcode-block" id="resource"><a class="viewcode-back" href="../../api.html#approxeng.task.resource">[docs]</a><span class="k">def</span> <span class="nf">resource</span><span class="p">(</span><span class="n">_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decorator to indicate that a function produces a resource. If the resource is a static value you should probably</span>
+<span class="sd">    use the register_resource instead.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Called with no name argument</span>
+        <span class="n">register_resource</span><span class="p">(</span><span class="n">_func</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">_func</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_func</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Called with an explicit name argument, use this to register it</span>
+        <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+            <span class="n">register_resource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">func</span>
+
+        <span class="k">return</span> <span class="n">decorator</span></div>
+
+
+<div class="viewcode-block" id="TaskException"><a class="viewcode-back" href="../../api.html#approxeng.task.TaskException">[docs]</a><span class="k">class</span> <span class="nc">TaskException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Task"><a class="viewcode-back" href="../../api.html#approxeng.task.Task">[docs]</a><span class="k">class</span> <span class="nc">Task</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract base class for tasks, things which are called repeatedly to perform some higher function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Task.World"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.World">[docs]</a>    <span class="k">class</span> <span class="nc">World</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The world that the task tick sees, consists of all resources the task said it needed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Task.World.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.World.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resources</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">task_resource</span><span class="p">:</span> <span class="n">RESOURCES</span><span class="p">[</span><span class="n">task_resource</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">}</span></div>
+
+        <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">single_item</span><span class="p">)</span> <span class="k">for</span> <span class="n">single_item</span> <span class="ow">in</span> <span class="n">item</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span>
+
+        <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span></div>
+
+<div class="viewcode-block" id="Task.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new task</span>
+
+<span class="sd">        :param name:</span>
+<span class="sd">            Name used internally by this task</span>
+<span class="sd">        :param resources:</span>
+<span class="sd">            A string, or list of strings, containing names of resources which must be available for this task to</span>
+<span class="sd">            function. Any such resources will be initialised and shutdown alongside the task itself. If this is</span>
+<span class="sd">            set to None then all resources registered will be available, otherwise only those explicitly named here</span>
+<span class="sd">            will be accessible from the task logic.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="n">resources</span>
+        <span class="k">if</span> <span class="n">resources</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="p">[</span><span class="n">resources</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A list of names of resources needed by this task, if this was originally set to None then this returns a list</span>
+<span class="sd">        containing all the registered resource names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">task_resource</span> <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="n">RESOURCES</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span>
+
+<div class="viewcode-block" id="Task.do_startup"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.do_startup">[docs]</a>    <span class="k">def</span> <span class="nf">do_startup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If this task is not currently active, call startup on any required resources, then call startup on the task</span>
+<span class="sd">        implementation. No need to call this explicitly as it&#39;s called if the task isn&#39;t active on the first tick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Task &quot;</span><span class="si">%s</span><span class="s1">&quot; startup called but task already active&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Task &quot;</span><span class="si">%s</span><span class="s1">&quot; starting&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">task_resource</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">RESOURCES</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TaskException</span><span class="p">(</span><span class="s1">&#39;Required resource &quot;</span><span class="si">{}</span><span class="s1">&quot; not defined&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task_resource</span><span class="p">))</span>
+                <span class="n">RESOURCES</span><span class="p">[</span><span class="n">task_resource</span><span class="p">]</span><span class="o">.</span><span class="n">startup</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">startup</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Task.do_shutdown"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.do_shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">do_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If this task is active, shut it down, then call shutdown on all resources.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Task &quot;</span><span class="si">%s</span><span class="s1">&quot; shutting down&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+                <span class="n">RESOURCES</span><span class="p">[</span><span class="n">task_resource</span><span class="p">]</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="Task.do_tick"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.do_tick">[docs]</a>    <span class="k">def</span> <span class="nf">do_tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start up the task, if needed, then call the tick method, passing in the world and tick count.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_startup</span><span class="p">()</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Task &quot;</span><span class="si">%s</span><span class="s1">&quot; tick </span><span class="si">%i</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">world</span><span class="o">=</span><span class="n">Task</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">),</span> <span class="n">count</span><span class="o">=</span><span class="n">count</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Task.startup"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.startup">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">startup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Implement to provide startup logic for the task.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Task.shutdown"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.shutdown">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Implement to provide shutdown logic for the task.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Task.tick"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.tick">[docs]</a>    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called every tick, do your stuff here!</span>
+
+<span class="sd">        :param world:</span>
+<span class="sd">            A world object, access any required resources through properties on this object.</span>
+<span class="sd">        :param count:</span>
+<span class="sd">            The global tick count.</span>
+<span class="sd">        :return:</span>
+<span class="sd">            Used to signal what to do at the end of the tick:</span>
+<span class="sd">            None - continue, call the same task again</span>
+<span class="sd">            True - exit from the task loop. Probably don&#39;t do this, instead...</span>
+<span class="sd">            ...String or Task - shut this task down and set the specified task (name or direct reference) to be the</span>
+<span class="sd">            active one. If you want to exit the best way to do so is to delegate to the exit task, or to a custom task</span>
+<span class="sd">            which gracefully shuts down your hardware before exiting from the loop.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="SimpleTask"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleTask">[docs]</a><span class="k">class</span> <span class="nc">SimpleTask</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that wraps a single task function, including basic state consisting of an initially blank dict that</span>
+<span class="sd">    the task can safely write to and read from for the duration of the run.</span>
+
+<span class="sd">    The function wrapped by the task can accept any or all of the following parameters:</span>
+
+<span class="sd">    state : passed the state dict, persists across multiple calls within a task session.</span>
+<span class="sd">    world : passed the world state, consisting of a set of named resources as requested by the task specification.</span>
+<span class="sd">    count : monotonically ascending tick count across the entire application.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SimpleTask.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleTask.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_function</span><span class="p">,</span> <span class="n">resources</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new simple task instance, this is generally going to be called from within the library when wrapping</span>
+<span class="sd">        a task function.</span>
+
+<span class="sd">        :param task_function:</span>
+<span class="sd">            A function, which may accept any or all of [state, world, count] parameters, and which will be called every</span>
+<span class="sd">            tick while this task is active.</span>
+<span class="sd">        :param resources:</span>
+<span class="sd">            A list of named resources to be supplied through the world parameter to the task function.</span>
+<span class="sd">        :param name:</span>
+<span class="sd">            The name of the task, this is only really used internally for logging, the canonical name is defined by the</span>
+<span class="sd">            key under which the task is registered.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SimpleTask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_function</span> <span class="o">=</span> <span class="n">task_function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+<div class="viewcode-block" id="SimpleTask.startup"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleTask.startup">[docs]</a>    <span class="k">def</span> <span class="nf">startup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear the state dict, this should never be needed but doesn&#39;t hurt to check</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleTask.shutdown"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleTask.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear the state dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SimpleTask.tick"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleTask.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A single task tick. Calls the task function, supplying it with whatever parameters it needs.</span>
+
+<span class="sd">        :param world:</span>
+<span class="sd">            World state, set of resources accessible as properties.</span>
+<span class="sd">        :param count:</span>
+<span class="sd">            Global tick counter, increases by 1 each time</span>
+<span class="sd">        :return:</span>
+<span class="sd">            The return value from the task function. As elsewhere, this is interpreted as follows:</span>
+<span class="sd">            None - don&#39;t change anything, keep this task running, call it again</span>
+<span class="sd">            True - exit from the task processing loop, shutting down the process</span>
+<span class="sd">            Task or String - shut this task down, set the named or provided task as the current task</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">task_function</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s1">&#39;state&#39;</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="n">args</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span>
+        <span class="k">if</span> <span class="s1">&#39;world&#39;</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="n">args</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">world</span>
+        <span class="k">if</span> <span class="s1">&#39;count&#39;</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="n">args</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_function</span><span class="p">(</span><span class="o">**</span><span class="n">args</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="register_task"><a class="viewcode-back" href="../../api.html#approxeng.task.register_task">[docs]</a><span class="k">def</span> <span class="nf">register_task</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Explicitly register a task, either from a function or from an instance of Task</span>
+
+<span class="sd">    :param name:</span>
+<span class="sd">        Name used to reference the task</span>
+<span class="sd">    :param value:</span>
+<span class="sd">        Either a task function, in which case this behaves as if the function were annotated with @task, or a Task</span>
+<span class="sd">        object. You may want to use the latter, more verbose, form if extensive setup or custom state handling is</span>
+<span class="sd">        needed by your task, although in general most of such handling should be done with resources and tasks</span>
+<span class="sd">        themselves should remain largely state free.</span>
+<span class="sd">    :param resources:</span>
+<span class="sd">        A string, or list of strings, containing the names of resources required for this task to run. These resources</span>
+<span class="sd">        will be initialised at the same time as the task itself, and shut down alongside it where appropriate. They are</span>
+<span class="sd">        accessible from the world object passed to the tick function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">):</span>
+        <span class="n">TASKS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">SimpleTask</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">task_function</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Registered task function &quot;</span><span class="si">%s</span><span class="s1">&quot;, required resources: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">resources</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Task</span><span class="p">):</span>
+        <span class="n">TASKS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Registered task class &quot;</span><span class="si">%s</span><span class="s1">&quot;, required resources: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">resources</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Resource"><a class="viewcode-back" href="../../api.html#approxeng.task.Resource">[docs]</a><span class="k">class</span> <span class="nc">Resource</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract base class for resources, things which are used by tasks and which may have a lifecycle. When a new task</span>
+<span class="sd">    is started, any resources the task requires are started. On each task tick the value method is called on each</span>
+<span class="sd">    resource and is used to populate the world dict passed to the task function. When the task is shut down each</span>
+<span class="sd">    resource has its shutdown function called.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Resource.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.Resource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span></div>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">startup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="SimpleResource"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleResource">[docs]</a><span class="k">class</span> <span class="nc">SimpleResource</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple resource constructed with value, and optional setup / teardown functions. All these functions should be</span>
+<span class="sd">    no-argument ones.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SimpleResource.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleResource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value_func</span><span class="p">,</span> <span class="n">startup_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shutdown_func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SimpleResource</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_func</span> <span class="o">=</span> <span class="n">value_func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startup_func</span> <span class="o">=</span> <span class="n">startup_func</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shutdown_func</span> <span class="o">=</span> <span class="n">shutdown_func</span></div>
+
+    <span class="k">def</span> <span class="nf">startup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">startup_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">startup_func</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shutdown_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shutdown_func</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_func</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="register_resource"><a class="viewcode-back" href="../../api.html#approxeng.task.register_resource">[docs]</a><span class="k">def</span> <span class="nf">register_resource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Explicitly register a value as a resource. If the value is a function then wrap it up as the value() method of a</span>
+<span class="sd">    resource class instance. If it is already a resource class instance just register it. If it&#39;s a plain static value</span>
+<span class="sd">    then wrap it in a function that always returns that value, then wrap that up in the simple class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">):</span>
+        <span class="n">RESOURCES</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">SimpleResource</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value_func</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Registered resource function &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Resource</span><span class="p">):</span>
+        <span class="n">RESOURCES</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Registered resource class &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">resource_function</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="n">RESOURCES</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">SimpleResource</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value_func</span><span class="o">=</span><span class="n">resource_function</span><span class="p">)</span>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Registered resource value &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ExitTask"><a class="viewcode-back" href="../../api.html#approxeng.task.ExitTask">[docs]</a><span class="k">class</span> <span class="nc">ExitTask</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Switch control to this task to exit the task loop. Registered with the name &#39;exit&#39; for convenience</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ExitTask.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.ExitTask.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ExitTask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;exit&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExitTask.startup"><a class="viewcode-back" href="../../api.html#approxeng.task.ExitTask.startup">[docs]</a>    <span class="k">def</span> <span class="nf">startup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ExitTask.shutdown"><a class="viewcode-back" href="../../api.html#approxeng.task.ExitTask.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ExitTask.tick"><a class="viewcode-back" href="../../api.html#approxeng.task.ExitTask.tick">[docs]</a>    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="c1"># At this point we&#39;ve got access to the error message through world.error</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<span class="c1"># Register the exit task as &#39;exit&#39;</span>
+<span class="n">register_task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">ExitTask</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="run"><a class="viewcode-back" href="../../api.html#approxeng.task.run">[docs]</a><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">root_task</span><span class="p">,</span> <span class="n">error_task</span><span class="o">=</span><span class="s1">&#39;exit&#39;</span><span class="p">,</span> <span class="n">check_tasks</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Run the task loop!</span>
+
+<span class="sd">    :param root_task:</span>
+<span class="sd">        The first task to start with</span>
+<span class="sd">    :param error_task:</span>
+<span class="sd">        The task to switch to if an exception occurs, defaults to the ExitTask to exit the loop. If you have hardware</span>
+<span class="sd">        such as motors that you need to ensure is deactivated, the best approach is to have a task that only does</span>
+<span class="sd">        hardware shutdown, handles any errors with that process internally, and then delegates to the exit task to</span>
+<span class="sd">        stop the task look.</span>
+<span class="sd">    :param check_tasks:</span>
+<span class="sd">        A sequence of functions which will be called before each tick of the selected task. If any of them return</span>
+<span class="sd">        then the return value is used instead of calling and using the value of the task&#39;s tick. This can be done</span>
+<span class="sd">        to handle cases like &#39;make the home button always jump back to the root task&#39;, or &#39;exit the task loop on</span>
+<span class="sd">        low battery conditions&#39; or similar. Don&#39;t put too much logic here, it&#39;ll get called every tick. Also good for</span>
+<span class="sd">        cases where you absolutely want to bail if hardware isn&#39;t available (joystick out of range is a particular case)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_task</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resolve a task instance</span>
+
+<span class="sd">        :param t:</span>
+<span class="sd">            Either a name, or a Task object</span>
+<span class="sd">        :return:</span>
+<span class="sd">            The task object, if supplied, or the result of a lookup in the TASKS global otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Task</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">t</span>
+        <span class="k">return</span> <span class="n">TASKS</span><span class="p">[</span><span class="n">t</span><span class="p">]</span>
+
+    <span class="c1"># Start with the root task as the active one</span>
+    <span class="n">active_task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="n">root_task</span><span class="p">)</span>
+    <span class="c1"># Initialise count to 0</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># Loop until we&#39;re done</span>
+    <span class="n">finished</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">finished</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="c1"># If we have any pre-task checks to run do them now. If any of those functions return</span>
+            <span class="c1"># non-None values we&#39;ll use those in place of the active task. Code these carefully!</span>
+            <span class="c1"># Here&#39;s where you&#39;d check for e.g. joystick not connected.</span>
+            <span class="k">if</span> <span class="n">check_tasks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">check_task</span> <span class="ow">in</span> <span class="n">check_tasks</span><span class="p">:</span>
+                    <span class="n">check_response</span> <span class="o">=</span> <span class="n">check_task</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">check_response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">response</span> <span class="o">=</span> <span class="n">check_response</span>
+            <span class="c1"># If no check_task functions returned anything, run the actual task tick</span>
+            <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">active_task</span><span class="o">.</span><span class="n">do_tick</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+            <span class="c1"># Increment the tick count</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="c1"># If the tick function returned a value it means we need to switch control</span>
+            <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">Task</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="c1"># New task, either name or Task object. Shut down and switch to it for the next tick</span>
+                    <span class="n">active_task</span><span class="o">.</span><span class="n">do_shutdown</span><span class="p">()</span>
+                    <span class="n">active_task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">and</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="c1"># True value returned, shut the current task down and exit the loop</span>
+                    <span class="n">active_task</span><span class="o">.</span><span class="n">do_shutdown</span><span class="p">()</span>
+                    <span class="n">finished</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Anything throwing an exception ends up here. Log it first, then delegate to a handler task</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># Shut the active task down, add the exception to the world as &#39;error&#39; and launch the error task</span>
+            <span class="n">active_task</span><span class="o">.</span><span class="n">do_shutdown</span><span class="p">()</span>
+            <span class="n">register_resource</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="n">active_task</span> <span class="o">=</span> <span class="n">get_task</span><span class="p">(</span><span class="n">error_task</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, 2020 Tom Oinn
+      <span class="lastupdated">
+        Last updated on Jan 09, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
