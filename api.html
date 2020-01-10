@@ -423,7 +423,8 @@ needed by your task, although in general most of such handling should be done wi
 themselves should remain largely state free.</p></li>
 <li><p><strong>resources</strong> – A string, or list of strings, containing the names of resources required for this task to run. These resources
 will be initialised at the same time as the task itself, and shut down alongside it where appropriate. They are
-accessible from the world object passed to the tick function.</p></li>
+accessible from the world object passed to the tick function. This is not used if a Task object is passed, as
+these already specify their resource lists.</p></li>
 </ul>
 </dd>
 </dl>
@@ -465,6 +466,122 @@ cases where you absolutely want to bail if hardware isn’t available (joystick 
 name if explicitly provided, or the name of the function otherwise.</p>
 </dd></dl>
 
+<span class="target" id="module-approxeng.task.menu"></span><dl class="class">
+<dt id="approxeng.task.menu.KeyboardMenuTask">
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.menu.</code><code class="sig-name descname">KeyboardMenuTask</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">title</em>, <em class="sig-param">parent_task</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#KeyboardMenuTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.KeyboardMenuTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not particularly clever implementation of MenuTask that uses print statements and input() to get menu choices. Has
+the advantage of working with no additional resources, so handy for testing.</p>
+<dl class="method">
+<dt id="approxeng.task.menu.KeyboardMenuTask.display_menu">
+<code class="sig-name descname">display_menu</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">title</em>, <em class="sig-param">item_title</em>, <em class="sig-param">item_index</em>, <em class="sig-param">item_count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#KeyboardMenuTask.display_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.KeyboardMenuTask.display_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Don’t display here, because we block on input so if we did this ‘properly’ we’d end up waiting for the user
+to enter a response before then showing them the options. While this <em>is</em> amusing, it’s probably not helpful.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.menu.KeyboardMenuTask.get_menu_action">
+<code class="sig-name descname">get_menu_action</code><span class="sig-paren">(</span><em class="sig-param">world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#KeyboardMenuTask.get_menu_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.KeyboardMenuTask.get_menu_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the menu, then prompt the user to select an index or, if parent is defined, ‘u’ to to up.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="approxeng.task.menu.MenuAction">
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.menu.</code><code class="sig-name descname">MenuAction</code><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuAction" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enumeration.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="approxeng.task.menu.MenuTask">
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.menu.</code><code class="sig-name descname">MenuTask</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">title</em>, <em class="sig-param">parent_task</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask" title="Permalink to this definition">¶</a></dt>
+<dd><p>A single menu, consisting of a title and a set of items, each of which will launch a
+task when selected. Optionally menus may have a parent.</p>
+<dl class="method">
+<dt id="approxeng.task.menu.MenuTask.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">title</em>, <em class="sig-param">parent_task</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new task</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name used internally by this task</p></li>
+<li><p><strong>resources</strong> – A string, or list of strings, containing names of resources which must be available for this task to
+function. Any such resources will be initialised and shutdown alongside the task itself. If this is
+set to None then all resources registered will be available, otherwise only those explicitly named here
+will be accessible from the task logic.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.menu.MenuTask.display_menu">
+<em class="property">abstract </em><code class="sig-name descname">display_menu</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">title</em>, <em class="sig-param">item_title</em>, <em class="sig-param">item_index</em>, <em class="sig-param">item_count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.display_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask.display_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the current menu state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> – Provides any resources needed to display the menu</p></li>
+<li><p><strong>title</strong> – Title for the current menu</p></li>
+<li><p><strong>item_title</strong> – Title for the currently selected item</p></li>
+<li><p><strong>item_index</strong> – Index of the currently selected item</p></li>
+<li><p><strong>item_count</strong> – Number of available items</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.menu.MenuTask.get_menu_action">
+<em class="property">abstract </em><code class="sig-name descname">get_menu_action</code><span class="sig-paren">(</span><em class="sig-param">world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.get_menu_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask.get_menu_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the action, if any, to take on this menu item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>world</strong> – Provides any resources needed to read the appropriate action</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None for no action, or an instance of MenuAction for navigation, or an int to immediately select that index
+item.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.menu.MenuTask.shutdown">
+<code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement to provide shutdown logic for the task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.menu.MenuTask.startup">
+<code class="sig-name descname">startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.startup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask.startup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement to provide startup logic for the task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="approxeng.task.menu.MenuTask.tick">
+<code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask.tick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called every tick, do your stuff here!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> – A world object, access any required resources through properties on this object.</p></li>
+<li><p><strong>count</strong> – The global tick count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Used to signal what to do at the end of the tick:
+None - continue, call the same task again
+True - exit from the task loop. Probably don’t do this, instead…
+…String or Task - shut this task down and set the specified task (name or direct reference) to be the
+active one. If you want to exit the best way to do so is to delegate to the exit task, or to a custom task
+which gracefully shuts down your hardware before exiting from the loop.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -487,7 +604,7 @@ name if explicitly provided, or the name of the function otherwise.</p>
     <p>
         &copy; Copyright 2019, 2020 Tom Oinn
       <span class="lastupdated">
-        Last updated on Jan 09, 2020.
+        Last updated on Jan 10, 2020.
       </span>
 
     </p>

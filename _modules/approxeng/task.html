@@ -410,14 +410,15 @@
 <span class="sd">    :param resources:</span>
 <span class="sd">        A string, or list of strings, containing the names of resources required for this task to run. These resources</span>
 <span class="sd">        will be initialised at the same time as the task itself, and shut down alongside it where appropriate. They are</span>
-<span class="sd">        accessible from the world object passed to the tick function.</span>
+<span class="sd">        accessible from the world object passed to the tick function. This is not used if a Task object is passed, as</span>
+<span class="sd">        these already specify their resource lists.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">):</span>
         <span class="n">TASKS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">SimpleTask</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">task_function</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="p">)</span>
         <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Registered task function &quot;</span><span class="si">%s</span><span class="s1">&quot;, required resources: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">resources</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Task</span><span class="p">):</span>
         <span class="n">TASKS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Registered task class &quot;</span><span class="si">%s</span><span class="s1">&quot;, required resources: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">resources</span><span class="p">)</span></div>
+        <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Registered task class &quot;</span><span class="si">%s</span><span class="s1">&quot;, required resources: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">resources</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Resource"><a class="viewcode-back" href="../../api.html#approxeng.task.Resource">[docs]</a><span class="k">class</span> <span class="nc">Resource</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
@@ -597,7 +598,7 @@
     <p>
         &copy; Copyright 2019, 2020 Tom Oinn
       <span class="lastupdated">
-        Last updated on Jan 09, 2020.
+        Last updated on Jan 10, 2020.
       </span>
 
     </p>
