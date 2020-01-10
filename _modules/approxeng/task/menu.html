@@ -87,9 +87,10 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../simpleusage.html">Simple Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../menu.html">Menu Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Change Log</a></li>
 </ul>
 
             
@@ -174,7 +175,7 @@
     <span class="n">up</span> <span class="o">=</span> <span class="mi">4</span></div>
 
 
-<div class="viewcode-block" id="MenuTask"><a class="viewcode-back" href="../../../api.html#approxeng.task.menu.MenuTask">[docs]</a><span class="k">class</span> <span class="nc">MenuTask</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
+<div class="viewcode-block" id="MenuTask"><a class="viewcode-back" href="../../../menu.html#approxeng.task.menu.MenuTask">[docs]</a><span class="k">class</span> <span class="nc">MenuTask</span><span class="p">(</span><span class="n">Task</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A single menu, consisting of a title and a set of items, each of which will launch a</span>
 <span class="sd">    task when selected. Optionally menus may have a parent.</span>
@@ -196,6 +197,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="s1">&#39;task&#39;</span><span class="p">:</span> <span class="n">task_name</span><span class="p">})</span>
 
 <div class="viewcode-block" id="MenuTask.startup"><a class="viewcode-back" href="../../../api.html#approxeng.task.menu.MenuTask.startup">[docs]</a>    <span class="k">def</span> <span class="nf">startup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :internal:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">item_index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display_update</span> <span class="o">=</span> <span class="kc">True</span></div>
 
@@ -229,7 +234,7 @@
                               <span class="n">item_index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">item_index</span><span class="p">,</span> <span class="n">item_count</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">display_update</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="MenuTask.get_menu_action"><a class="viewcode-back" href="../../../api.html#approxeng.task.menu.MenuTask.get_menu_action">[docs]</a>    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="MenuTask.get_menu_action"><a class="viewcode-back" href="../../../menu.html#approxeng.task.menu.MenuTask.get_menu_action">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">get_menu_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the action, if any, to take on this menu item.</span>
@@ -242,7 +247,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="MenuTask.display_menu"><a class="viewcode-back" href="../../../api.html#approxeng.task.menu.MenuTask.display_menu">[docs]</a>    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="MenuTask.display_menu"><a class="viewcode-back" href="../../../menu.html#approxeng.task.menu.MenuTask.display_menu">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">display_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">item_title</span><span class="p">,</span> <span class="n">item_index</span><span class="p">,</span> <span class="n">item_count</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Display the current menu state</span>
@@ -293,16 +298,30 @@
         <span class="k">pass</span></div></div>
 
 
-<span class="k">def</span> <span class="nf">register_menu_tasks_from_yaml</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">menu_task_class</span><span class="o">=</span><span class="n">MenuTask</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="register_menu_tasks_from_yaml"><a class="viewcode-back" href="../../../api.html#approxeng.task.menu.register_menu_tasks_from_yaml">[docs]</a><span class="k">def</span> <span class="nf">register_menu_tasks_from_yaml</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">menu_task_class</span><span class="o">=</span><span class="n">MenuTask</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    :param filename:</span>
+<span class="sd">    :param menu_task_class:</span>
+<span class="sd">    :param resources:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">menu_dict</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">register_menu_tasks</span><span class="p">(</span><span class="n">menu_dict</span><span class="o">=</span><span class="n">menu_dict</span><span class="p">,</span> <span class="n">menu_task_class</span><span class="o">=</span><span class="n">menu_task_class</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">yaml</span><span class="o">.</span><span class="n">YAMLError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unable to load YAML from </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Unable to load YAML from </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">register_menu_tasks</span><span class="p">(</span><span class="n">menu_dict</span><span class="p">,</span> <span class="n">menu_task_class</span><span class="o">=</span><span class="n">MenuTask</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="register_menu_tasks"><a class="viewcode-back" href="../../../api.html#approxeng.task.menu.register_menu_tasks">[docs]</a><span class="k">def</span> <span class="nf">register_menu_tasks</span><span class="p">(</span><span class="n">menu_dict</span><span class="p">,</span> <span class="n">menu_task_class</span><span class="o">=</span><span class="n">MenuTask</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    :param menu_dict:</span>
+<span class="sd">    :param menu_task_class:</span>
+<span class="sd">    :param resources:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">menus</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">menu_dict</span><span class="p">)</span>
     <span class="n">all_task_names</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">menu</span> <span class="ow">in</span> <span class="n">menus</span><span class="p">:</span>
@@ -333,7 +352,7 @@
                 <span class="c1"># Titled task item, add it to the menu</span>
                 <span class="n">task</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">],</span> <span class="n">task_name</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;task&#39;</span><span class="p">])</span>
         <span class="n">register_task</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">task</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">all_task_names</span>
+    <span class="k">return</span> <span class="n">all_task_names</span></div>
 </pre></div>
 
            </div>

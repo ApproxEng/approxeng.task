@@ -39,7 +39,8 @@
   <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Simple Usage" href="simpleusage.html" /> 
+    <link rel="next" title="Change Log" href="changelog.html" />
+    <link rel="prev" title="Menu Generation" href="menu.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,9 +89,10 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simpleusage.html">Simple Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu.html">Menu Generation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 </ul>
 
             
@@ -555,7 +557,13 @@ item.</p>
 <dl class="method">
 <dt id="approxeng.task.menu.MenuTask.startup">
 <code class="sig-name descname">startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.startup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask.startup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement to provide startup logic for the task.</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Internal</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -582,6 +590,40 @@ which gracefully shuts down your hardware before exiting from the loop.</p>
 
 </dd></dl>
 
+<dl class="function">
+<dt id="approxeng.task.menu.register_menu_tasks">
+<code class="sig-prename descclassname">approxeng.task.menu.</code><code class="sig-name descname">register_menu_tasks</code><span class="sig-paren">(</span><em class="sig-param">menu_dict</em>, <em class="sig-param">menu_task_class=&lt;class 'approxeng.task.menu.MenuTask'&gt;</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#register_menu_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.register_menu_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>menu_dict</strong> – </p></li>
+<li><p><strong>menu_task_class</strong> – </p></li>
+<li><p><strong>resources</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="approxeng.task.menu.register_menu_tasks_from_yaml">
+<code class="sig-prename descclassname">approxeng.task.menu.</code><code class="sig-name descname">register_menu_tasks_from_yaml</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">menu_task_class=&lt;class 'approxeng.task.menu.MenuTask'&gt;</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#register_menu_tasks_from_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.register_menu_tasks_from_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – </p></li>
+<li><p><strong>menu_task_class</strong> – </p></li>
+<li><p><strong>resources</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -592,8 +634,10 @@ which gracefully shuts down your hardware before exiting from the loop.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Change Log" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="simpleusage.html" class="btn btn-neutral float-left" title="Simple Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="menu.html" class="btn btn-neutral float-left" title="Menu Generation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

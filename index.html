@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Change Log" href="changelog.html" /> 
+    <link rel="next" title="Simple Usage" href="simpleusage.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,9 +88,10 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simpleusage.html">Simple Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="menu.html">Menu Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
 </ul>
 
             
@@ -158,10 +159,12 @@
 <p>This library provides a lightweight task and resource framework designed to
 simplify the process of coding up a <a class="reference external" href="http://piwars.org">PiWars</a> robot. It is written in for Python 3,
 tested on 3.7, and is available under the Apache License v2 on <a class="reference external" href="https://github.com/ApproxEng/approxeng.task">GitHub</a></p>
+<p>The library also provides special support for generating menu systems for your
+robots through a simple YAML based definition format and an extensible menu task.</p>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>Install with pip, preferably into a virtual environment:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install approxeng.task
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip3 install approxeng.task
 </pre></div>
 </div>
 </div>
@@ -169,11 +172,6 @@ tested on 3.7, and is available under the Apache License v2 on <a class="referen
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-2">Version 0.0.2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-1">Version 0.0.1</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="simpleusage.html">Simple Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="simpleusage.html#defining-resources">Defining Resources</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="simpleusage.html#constant-resources">Constant Resources</a></li>
@@ -188,7 +186,22 @@ tested on 3.7, and is available under the Apache License v2 on <a class="referen
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="menu.html">Menu Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="menu.html#menu-definitions">Menu Definitions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="menu.html#multiple-menus">Multiple Menus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="menu.html#more-concise-nested-menus">More Concise Nested Menus</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="menu.html#implementing-a-menutask">Implementing a MenuTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="menu.html#registering-menu-tasks">Registering Menu Tasks</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-2">Version 0.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-0-0-1">Version 0.0.1</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -202,7 +215,7 @@ tested on 3.7, and is available under the Apache License v2 on <a class="referen
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="changelog.html" class="btn btn-neutral float-right" title="Change Log" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="simpleusage.html" class="btn btn-neutral float-right" title="Simple Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

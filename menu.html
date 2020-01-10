@@ -1,0 +1,452 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Menu Generation &mdash; Approximate Engineering - Task 0.0.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Approximate Engineering - Task 0.0.2 documentation"
+          href="_static/opensearch.xml"/>
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Simple Usage" href="simpleusage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Approximate Engineering - Task
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="simpleusage.html">Simple Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Menu Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#menu-definitions">Menu Definitions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#multiple-menus">Multiple Menus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-concise-nested-menus">More Concise Nested Menus</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#implementing-a-menutask">Implementing a MenuTask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#registering-menu-tasks">Registering Menu Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Change Log</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Approximate Engineering - Task</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Menu Generation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="menu-generation">
+<h1>Menu Generation<a class="headerlink" href="#menu-generation" title="Permalink to this headline">¶</a></h1>
+<p>Most robots will require some kind of menu system, to select challenges, configure settings etc. To build this we need
+three things:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>A definition of the menu structure.</p></li>
+<li><p>Some way to display the current state.</p></li>
+<li><p>Some way to navigate around the menus, select items etc.</p></li>
+</ol>
+</div></blockquote>
+<p>You could do all this with a bunch of <code class="docutils literal notranslate"><span class="pre">if</span></code> statements, but that approach very rapidly becomes unmaintainable. Instead
+this library provides a way to configure a menu system from a dictionary (explicitly defined, or loaded from a YAML
+file), and then automatically builds the corresponding tasks to display and navigate around those configured items.</p>
+<p>Because all robots are different, you will have to write a bit of custom code to handle display and navigation. You do
+this by subclassing <a class="reference internal" href="api.html#approxeng.task.menu.MenuTask" title="approxeng.task.menu.MenuTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">approxeng.task.menu.MenuTask</span></code></a> and implementing two methods,
+<a class="reference internal" href="api.html#approxeng.task.menu.MenuTask.get_menu_action" title="approxeng.task.menu.MenuTask.get_menu_action"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_menu_action()</span></code></a> and <a class="reference internal" href="api.html#approxeng.task.menu.MenuTask.display_menu" title="approxeng.task.menu.MenuTask.display_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display_menu()</span></code></a>. You then
+use this class when calling <a class="reference internal" href="api.html#approxeng.task.menu.register_menu_tasks" title="approxeng.task.menu.register_menu_tasks"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_menu_tasks()</span></code></a> (to load from a dictionary) or
+<a class="reference internal" href="api.html#approxeng.task.menu.register_menu_tasks_from_yaml" title="approxeng.task.menu.register_menu_tasks_from_yaml"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_menu_tasks_from_yaml()</span></code></a> when loading menu definitions from a YAML file.</p>
+<p>If your display and navigation system needs access to resources (it almost certainly does) such as joysticks, or display
+hardware, these are provided in the normal way to the menu tasks through the world object. You have access to this when
+implementing your custom menu task class, along with other properties you’ll need such as the currently selected item,
+name of the active menu and similar. When you call the register function you can explicitly specify which resources your
+class needs to function, this works the same way as for any other task (the menus are just tasks themselves).</p>
+<p>To activate a menu, just switch active task to the name of the menu. This is probably something you’d do as a root task
+in most robots, but you might want to explicitly activate them at other times - there’s no limit to the number of menus
+you can have, and there’s nothing special about the root one, that’s just the task you choose to start with.</p>
+<div class="section" id="menu-definitions">
+<h2>Menu Definitions<a class="headerlink" href="#menu-definitions" title="Permalink to this headline">¶</a></h2>
+<p>We’ll use YAML syntax here, but you can also build dictionaries directly (YAML is more concise, and easier to edit than
+a Python dict). Firstly the most simple definition - a single menu which will give the user the option to launch one of
+two tasks:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">top_menu</span>
+  <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Main Menu</span>
+  <span class="nt">items</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">First task</span>
+      <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_a</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Second task</span>
+      <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_b</span>
+</pre></div>
+</div>
+<p>For those not familiar with YAML, this is a single item list. That item is a dictionary, with keys ‘name’, ‘title’, and
+‘items’. ‘items’ is a list of dictionaries with keys ‘title’ and ‘task’ (in this case). Hopefully it should be possible
+to follow what’s happening!</p>
+<p>There’s a single menu defined here. It’s called ‘top_menu’, and should display ‘Main Menu’ in some form when active. It
+has two possible options, ‘First task’ and ‘Second task’, which will launch ‘task_a’ and ‘task_b’ respectively when
+selected. When passed in to <a class="reference internal" href="api.html#approxeng.task.menu.register_menu_tasks_from_yaml" title="approxeng.task.menu.register_menu_tasks_from_yaml"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_menu_tasks_from_yaml()</span></code></a> this will register a single task
+called ‘top_menu’, this can then be launched like any other task.</p>
+<div class="section" id="multiple-menus">
+<h3>Multiple Menus<a class="headerlink" href="#multiple-menus" title="Permalink to this headline">¶</a></h3>
+<p>You can specify multiple menus in a single file, just add more items to the top level list:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">top_menu</span>
+  <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Main Menu</span>
+  <span class="nt">items</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">First task</span>
+      <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_a</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Go to submenu</span>
+      <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sub_menu</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sub_menu</span>
+  <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Sub Menu</span>
+  <span class="nt">items</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Back</span>
+      <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">top_menu</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Do a thing</span>
+      <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_c</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Do another thing</span>
+      <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_d</span>
+</pre></div>
+</div>
+<p>This defines two menus, and also provides navigation between them. There’s nothing special about menus, they just turn
+into named tasks so in this case the item ‘Go to a submenu’ activates a task called ‘sub_menu’, and the second menu in
+this YAML definition creates a task called ‘sub_menu’, which in turn has an item ‘Back’ which activates the ‘top_menu’
+task. So we have a nested menu structure, but it’s a bit clunky.</p>
+</div>
+<div class="section" id="more-concise-nested-menus">
+<h3>More Concise Nested Menus<a class="headerlink" href="#more-concise-nested-menus" title="Permalink to this headline">¶</a></h3>
+<p>The example above is a bit verbose, it creates an item which calls a menu task, then creates a menu task which has an
+item that calls the top menu task etc. This is sufficiently common that the library has a special syntax to handle it.
+The following will produce the same menu structure as the previous example, but with two differences:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>It’s a much shorter definition.</p></li>
+<li><p>The sub-menu task will have a name (all tasks do) but you haven’t explicitly defined it. That means you
+can’t manually activate that sub-menu. Not an issue here, if you need to do this use the form shown above.</p></li>
+</ol>
+</div></blockquote>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">top_menu</span>
+  <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Main Menu</span>
+  <span class="nt">items</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">First task</span>
+      <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_a</span>
+    <span class="p p-Indicator">-</span> <span class="nt">menu</span><span class="p">:</span>
+          <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Sub Menu</span>
+          <span class="nt">items</span><span class="p">:</span>
+            <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Do a thing</span>
+              <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_c</span>
+            <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Do another thing</span>
+              <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_d</span>
+</pre></div>
+</div>
+<p>With a nested definition like this you don’t have to define the ‘back’ task, as the menu system knows what the parent
+menu is and handles it with a special ‘up’ action.</p>
+</div>
+</div>
+<div class="section" id="implementing-a-menutask">
+<h2>Implementing a MenuTask<a class="headerlink" href="#implementing-a-menutask" title="Permalink to this headline">¶</a></h2>
+<p>To connect the menu system to your control and display resources you’ll need to create a new subclass of
+<a class="reference internal" href="api.html#approxeng.task.menu.MenuTask" title="approxeng.task.menu.MenuTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">MenuTask</span></code></a>, implementing two methods:</p>
+<dl class="class">
+<dt>
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.menu.</code><code class="sig-name descname">MenuTask</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">title</em>, <em class="sig-param">parent_task</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>A single menu, consisting of a title and a set of items, each of which will launch a
+task when selected. Optionally menus may have a parent.</p>
+<dl class="method">
+<dt>
+<em class="property">abstract </em><code class="sig-name descname">display_menu</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">title</em>, <em class="sig-param">item_title</em>, <em class="sig-param">item_index</em>, <em class="sig-param">item_count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.display_menu"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Display the current menu state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>world</strong> – Provides any resources needed to display the menu</p></li>
+<li><p><strong>title</strong> – Title for the current menu</p></li>
+<li><p><strong>item_title</strong> – Title for the currently selected item</p></li>
+<li><p><strong>item_index</strong> – Index of the currently selected item</p></li>
+<li><p><strong>item_count</strong> – Number of available items</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<em class="property">abstract </em><code class="sig-name descname">get_menu_action</code><span class="sig-paren">(</span><em class="sig-param">world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.get_menu_action"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Get the action, if any, to take on this menu item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>world</strong> – Provides any resources needed to read the appropriate action</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None for no action, or an instance of MenuAction for navigation, or an int to immediately select that index
+item.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p>As an example, let’s suppose we’re using approxeng.input as the input library, and that we’ve put the controller object
+into the world as a resource called joystick. The implementation of the
+<a class="reference internal" href="api.html#approxeng.task.menu.MenuTask.get_menu_action" title="approxeng.task.menu.MenuTask.get_menu_action"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_menu_action()</span></code></a>  might look like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">approxeng.task.menu</span> <span class="kn">import</span> <span class="n">MenuClass</span><span class="p">,</span> <span class="n">MenuAction</span>
+
+<span class="k">class</span> <span class="nc">MyMenuClass</span><span class="p">(</span><span class="n">MenuClass</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">get_menu_action</span><span class="p">(</span><span class="n">world</span><span class="p">):</span>
+
+        <span class="c1"># Get any buttons pressed since last check</span>
+        <span class="n">buttons_pressed</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">joystick</span><span class="o">.</span><span class="n">presses</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dleft&#39;</span> <span class="ow">in</span> <span class="n">buttons_pressed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MenuAction</span><span class="o">.</span><span class="n">previous</span>
+        <span class="k">elif</span> <span class="s1">&#39;dright&#39;</span> <span class="ow">in</span> <span class="n">buttons_pressed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MenuAction</span><span class="o">.</span><span class="n">next</span>
+        <span class="k">elif</span> <span class="s1">&#39;dup&#39;</span> <span class="ow">in</span> <span class="n">buttons_pressed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MenuAction</span><span class="o">.</span><span class="n">up</span>
+        <span class="k">elif</span> <span class="s1">&#39;cross&#39;</span> <span class="ow">in</span> <span class="n">buttons_pressed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MenuAction</span><span class="o">.</span><span class="n">select</span>
+</pre></div>
+</div>
+<p>This implementation gets the controller object from the world, then gets a button presses object representing any new
+button presses. It then checks in turn for the d-pad left, right, and up buttons, and for the cross button. And that’s
+all you need to do for navigation.</p>
+<p>Next suppose we have a display module attached, it’s a simple object with a couple of methods used to set the two lines
+of text. We register it as a resource called ‘display’ and use it to implement
+<a class="reference internal" href="api.html#approxeng.task.menu.MenuTask.display_menu" title="approxeng.task.menu.MenuTask.display_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display_menu()</span></code></a> in our new class to finish it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">approxeng.task.menu</span> <span class="kn">import</span> <span class="n">MenuClass</span><span class="p">,</span> <span class="n">MenuAction</span>
+
+<span class="k">class</span> <span class="nc">MyMenuClass</span><span class="p">(</span><span class="n">MenuClass</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">get_menu_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
+
+        <span class="c1"># Get any buttons pressed since last check</span>
+        <span class="n">buttons_pressed</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">joystick</span><span class="o">.</span><span class="n">presses</span>
+
+        <span class="k">if</span> <span class="s1">&#39;dleft&#39;</span> <span class="ow">in</span> <span class="n">buttons_pressed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MenuAction</span><span class="o">.</span><span class="n">previous</span>
+        <span class="k">elif</span> <span class="s1">&#39;dright&#39;</span> <span class="ow">in</span> <span class="n">buttons_pressed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MenuAction</span><span class="o">.</span><span class="n">next</span>
+        <span class="k">elif</span> <span class="s1">&#39;dup&#39;</span> <span class="ow">in</span> <span class="n">buttons_pressed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MenuAction</span><span class="o">.</span><span class="n">up</span>
+        <span class="k">elif</span> <span class="s1">&#39;cross&#39;</span> <span class="ow">in</span> <span class="n">buttons_pressed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">MenuAction</span><span class="o">.</span><span class="n">select</span>
+
+    <span class="k">def</span> <span class="nf">display_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">item_title</span><span class="p">,</span> <span class="n">item_index</span><span class="p">,</span> <span class="n">item_count</span><span class="p">):</span>
+
+        <span class="c1"># Get the display</span>
+        <span class="n">display</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">display</span>
+
+        <span class="n">display</span><span class="o">.</span><span class="n">set_line_1</span><span class="p">(</span><span class="n">title</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="p">(</span><span class="n">item_index</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;/&#39;</span><span class="o">+</span><span class="n">item_count</span><span class="p">)</span>
+        <span class="n">display</span><span class="o">.</span><span class="n">set_line_2</span><span class="p">(</span><span class="n">item_title</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will show the menu title, along with an indication of the number of items on the first line of the display, and the
+current selected item on the second line. We can navigate through the items within a menu using the left and right d-pad
+buttons, select on by pressing the cross button, or go up in the menu structure (if there’s a parent menu) by pressing
+the d-pad up button.</p>
+</div>
+<div class="section" id="registering-menu-tasks">
+<h2>Registering Menu Tasks<a class="headerlink" href="#registering-menu-tasks" title="Permalink to this headline">¶</a></h2>
+<p>Now we have a menu definition, along with a mechanism to display and navigate it, we just have to build the
+corresponding tasks and register them. In this example we’re going to use a YAML file, but you could also pass in the
+dictionary of menus directly, the structure is exactly the same in both cases.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">approxeng.task.menu</span> <span class="kn">import</span> <span class="n">register_menu_tasks_from_yaml</span>
+<span class="kn">from</span> <span class="nn">approxeng.task</span> <span class="kn">import</span> <span class="n">run</span>
+
+<span class="k">class</span> <span class="nc">MyMenuClass</span><span class="p">(</span><span class="n">MenuClass</span><span class="p">)</span>
+    <span class="c1"># Class you created in the previous stage</span>
+
+<span class="n">register_menu_tasks_from_yaml</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;menu_definition.yml&#39;</span><span class="p">,</span>
+                              <span class="n">menu_task_class</span><span class="o">=</span><span class="n">MyMenuClass</span><span class="p">,</span>
+                              <span class="n">resources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;joystick&#39;</span><span class="p">,</span><span class="s1">&#39;display&#39;</span><span class="p">])</span>
+
+<span class="n">run</span><span class="p">(</span><span class="n">root_task</span><span class="o">=</span><span class="s1">&#39;top_menu&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This loads in the definition from the file, creates tasks for each menu, configures the menu system to use the menu
+class you defined, and to make the ‘joystick’ and ‘display’ resources available to those tasks when running. It then
+runs the task called ‘top_menu’, which is the task for the menu with the same name in that file.</p>
+<p>Note - you don’t ever construct an instance of your menu class, the library does that for you. Just pass in the actual
+class (so no brackets!).</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="simpleusage.html" class="btn btn-neutral float-left" title="Simple Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, 2020 Tom Oinn
+      <span class="lastupdated">
+        Last updated on Jan 10, 2020.
+      </span>
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
