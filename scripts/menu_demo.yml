@@ -1,0 +1,30 @@
+- name: top_menu
+  title: Main Menu
+  items:
+    - title: Sub Menu 1
+      task: sub_menu
+    - title: Sub Menu 2
+      task: sub_menu_2
+
+- name: sub_menu
+  title: Sub Menu 1
+  items:
+    - title: Back
+      task: top_menu
+    - title: Foo
+      task: foo
+
+- name: sub_menu_2
+  title: Sub Menu 2
+  items:
+    - title: Back
+      task: top_menu
+    - title: Bar
+      task: bar
+    - menu:
+        title: Nested Menu
+        items:
+          - title: Back
+            task: sub_menu_2
+          - title: Urgle
+            task: urgle

@@ -255,14 +255,15 @@ def register_task(name, value, resources=None):
     :param resources:
         A string, or list of strings, containing the names of resources required for this task to run. These resources
         will be initialised at the same time as the task itself, and shut down alongside it where appropriate. They are
-        accessible from the world object passed to the tick function.
+        accessible from the world object passed to the tick function. This is not used if a Task object is passed, as
+        these already specify their resource lists.
     """
     if isinstance(value, types.FunctionType):
         TASKS[name] = SimpleTask(name=name, task_function=value, resources=resources)
         LOG.info('Registered task function "%s", required resources: %s', name, resources)
     elif isinstance(value, Task):
         TASKS[name] = value
-        LOG.info('Registered task class "%s", required resources: %s', name, resources)
+        LOG.info('Registered task class "%s", required resources: %s', name, value.resources)
 
 
 class Resource(ABC):

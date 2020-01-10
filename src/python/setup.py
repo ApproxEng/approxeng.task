@@ -12,7 +12,7 @@ setup(
     author_email='tomoinn@gmail.com',
     license='ASL2.0',
     packages=find_packages(),
-    install_requires=['cachetools==4.0.0'],
+    install_requires=['pyyaml==5.3'],
     include_package_data=True,
     dependency_links=[],
     zip_safe=False)
