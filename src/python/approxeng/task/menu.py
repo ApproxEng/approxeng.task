@@ -39,6 +39,10 @@ class MenuTask(Task):
         self.items.append({'title': title, 'task': task_name})
 
     def startup(self):
+        """
+        :internal:
+        :return:
+        """
         self.item_index = 0
         self.display_update = True
 
@@ -137,6 +141,13 @@ class KeyboardMenuTask(MenuTask):
 
 
 def register_menu_tasks_from_yaml(filename, menu_task_class=MenuTask, resources=None):
+    """
+
+    :param filename:
+    :param menu_task_class:
+    :param resources:
+    :return:
+    """
     with open(filename, 'r') as stream:
         try:
             menu_dict = yaml.safe_load(stream)
@@ -146,6 +157,13 @@ def register_menu_tasks_from_yaml(filename, menu_task_class=MenuTask, resources=
 
 
 def register_menu_tasks(menu_dict, menu_task_class=MenuTask, resources=None):
+    """
+
+    :param menu_dict:
+    :param menu_task_class:
+    :param resources:
+    :return:
+    """
     menus = copy.deepcopy(menu_dict)
     all_task_names = []
     for menu in menus:
