@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>approxeng.task &mdash; Approximate Engineering - Task 0.0.4 documentation</title>
+  <title>approxeng.task &mdash; Approximate Engineering - Task 0.0.5 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
 
     
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Approximate Engineering - Task 0.0.4 documentation"
+          title="Search within Approximate Engineering - Task 0.0.5 documentation"
           href="../../_static/opensearch.xml"/>
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.0.4
+                0.0.5
               </div>
             
           
@@ -219,7 +219,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Task.World.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.World.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resources</span><span class="p">,</span> <span class="n">global_count</span><span class="p">,</span> <span class="n">task_count</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">task_resource</span><span class="p">:</span> <span class="n">RESOURCES</span><span class="p">[</span><span class="n">task_resource</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">resource_name</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">RESOURCES</span><span class="p">[</span><span class="n">resource_name</span><span class="p">]</span>
+                <span class="n">dependency_values</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">dependencies</span><span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">resource_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="o">**</span><span class="n">dependency_values</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="s1">&#39;global_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">global_count</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="s1">&#39;task_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">task_count</span></div>
 
@@ -253,7 +257,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="p">[</span><span class="n">resources</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">task_count</span> <span class="o">=</span> <span class="mi">0</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ordered_resources</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">resources</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -262,7 +267,7 @@
 <span class="sd">        containing all the registered resource names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">task_resource</span> <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="n">RESOURCES</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">RESOURCES</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resources</span>
 
 <div class="viewcode-block" id="Task.do_startup"><a class="viewcode-back" href="../../api.html#approxeng.task.Task.do_startup">[docs]</a>    <span class="k">def</span> <span class="nf">do_startup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -270,11 +275,12 @@
 <span class="sd">        If this task is not currently active, call startup on any required resources, then call startup on the task</span>
 <span class="sd">        implementation. No need to call this explicitly as it&#39;s called if the task isn&#39;t active on the first tick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ordered_resources</span> <span class="o">=</span> <span class="n">get_resource_total_order</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Task &quot;</span><span class="si">%s</span><span class="s1">&quot; startup called but task already active&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Task &quot;</span><span class="si">%s</span><span class="s1">&quot; starting&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordered_resources</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">task_resource</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">RESOURCES</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="n">TaskException</span><span class="p">(</span><span class="s1">&#39;Required resource &quot;</span><span class="si">{}</span><span class="s1">&quot; not defined&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">task_resource</span><span class="p">))</span>
                 <span class="n">RESOURCES</span><span class="p">[</span><span class="n">task_resource</span><span class="p">]</span><span class="o">.</span><span class="n">startup</span><span class="p">()</span>
@@ -288,7 +294,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
             <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Task &quot;</span><span class="si">%s</span><span class="s1">&quot; shutting down&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">task_resource</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordered_resources</span><span class="p">):</span>
                 <span class="n">RESOURCES</span><span class="p">[</span><span class="n">task_resource</span><span class="p">]</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span></div>
 
@@ -300,7 +306,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">do_startup</span><span class="p">()</span>
         <span class="n">LOG</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Task &quot;</span><span class="si">%s</span><span class="s1">&quot;, task_tick </span><span class="si">%i</span><span class="s1">, global_tick </span><span class="si">%i</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_count</span><span class="p">,</span> <span class="n">Task</span><span class="o">.</span><span class="n">global_count</span><span class="p">)</span>
         <span class="n">return_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span>
-            <span class="n">world</span><span class="o">=</span><span class="n">Task</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="n">resources</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="n">task_count</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_count</span><span class="p">,</span> <span class="n">global_count</span><span class="o">=</span><span class="n">Task</span><span class="o">.</span><span class="n">global_count</span><span class="p">))</span>
+            <span class="n">world</span><span class="o">=</span><span class="n">Task</span><span class="o">.</span><span class="n">World</span><span class="p">(</span><span class="n">resources</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ordered_resources</span><span class="p">,</span>
+                             <span class="n">task_count</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">task_count</span><span class="p">,</span>
+                             <span class="n">global_count</span><span class="o">=</span><span class="n">Task</span><span class="o">.</span><span class="n">global_count</span><span class="p">))</span>
         <span class="n">Task</span><span class="o">.</span><span class="n">global_count</span> <span class="o">=</span> <span class="n">Task</span><span class="o">.</span><span class="n">global_count</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_count</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">return_value</span></div>
@@ -355,35 +363,16 @@
 <span class="sd">        a task function.</span>
 
 <span class="sd">        :param task_function:</span>
-<span class="sd">            A function, which may accept any or all of [state, world, count] parameters, and which will be called every</span>
-<span class="sd">            tick while this task is active.</span>
-<span class="sd">        :param resources:</span>
-<span class="sd">            A list of named resources to be supplied through the world parameter to the task function.</span>
+<span class="sd">            A function which will be called every tick while this task is active. If the function accepts parameters,</span>
+<span class="sd">            these are interpreted as the names of resources required by the task, and provided when the function is</span>
+<span class="sd">            called.</span>
 <span class="sd">        :param name:</span>
 <span class="sd">            The name of the task, this is only really used internally for logging, the canonical name is defined by the</span>
 <span class="sd">            key under which the task is registered.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">resources</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">task_function</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
-
-        <span class="c1"># task_state isn&#39;t a normal world resource, we&#39;ll explicitly add it later but we don&#39;t want the framework</span>
-        <span class="c1"># to try to initialise it. Remove it from the list of resources if it&#39;s been specified and make a note that</span>
-        <span class="c1"># we did so so we know to add it back in later</span>
-        <span class="k">if</span> <span class="s1">&#39;task_state&#39;</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">:</span>
-            <span class="n">resources</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;task_state&#39;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">uses_state</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">uses_state</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="c1"># The world always contains task_count and global_count, but we may not want it to. Remember whether these are</span>
-        <span class="c1"># used for later.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">use_task_count</span> <span class="o">=</span> <span class="s1">&#39;task_count&#39;</span> <span class="ow">in</span> <span class="n">resources</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">use_global_count</span> <span class="o">=</span> <span class="s1">&#39;global_count&#39;</span> <span class="ow">in</span> <span class="n">resources</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_task_count</span><span class="p">:</span>
-            <span class="n">resources</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;task_count&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_global_count</span><span class="p">:</span>
-            <span class="n">resources</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;global_count&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">task_function</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_args</span> <span class="k">if</span> <span class="n">res</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;task_state&#39;</span><span class="p">,</span> <span class="s1">&#39;task_count&#39;</span><span class="p">,</span> <span class="s1">&#39;global_count&#39;</span><span class="p">]]</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">SimpleTask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">task_function</span> <span class="o">=</span> <span class="n">task_function</span>
@@ -410,17 +399,11 @@
 <span class="sd">        :return:</span>
 <span class="sd">            The return value from the task function. As elsewhere, this is interpreted as follows:</span>
 <span class="sd">            None - don&#39;t change anything, keep this task running, call it again</span>
-<span class="sd">            True - exit from the task processing loop, shutting down the process</span>
+<span class="sd">            TaskStop - exit from the task processing loop, shutting down the process</span>
 <span class="sd">            Task or String - shut this task down, set the named or provided task as the current task</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">uses_state</span><span class="p">:</span>
-            <span class="n">world</span><span class="o">.</span><span class="n">dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;task_state&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">})</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_task_count</span><span class="p">:</span>
-            <span class="k">del</span> <span class="n">world</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="s1">&#39;task_count&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_global_count</span><span class="p">:</span>
-            <span class="k">del</span> <span class="n">world</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="s1">&#39;global_count&#39;</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_function</span><span class="p">(</span><span class="o">**</span><span class="n">world</span><span class="o">.</span><span class="n">dict</span><span class="p">)</span></div></div>
+        <span class="n">world</span><span class="o">.</span><span class="n">dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;task_state&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">})</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_function</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">world</span><span class="o">.</span><span class="n">dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">world</span><span class="o">.</span><span class="n">dict</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_args</span><span class="p">})</span></div></div>
 
 
 <div class="viewcode-block" id="register_task"><a class="viewcode-back" href="../../api.html#approxeng.task.register_task">[docs]</a><span class="k">def</span> <span class="nf">register_task</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -451,8 +434,22 @@
 <span class="sd">    resource has its shutdown function called.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Resource.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.Resource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Resource.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.Resource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param name:</span>
+<span class="sd">            Name used when referencing this resource</span>
+<span class="sd">        :param dependencies:</span>
+<span class="sd">            Optional list of strings containing names of resources which this resource depends upon. This does a number</span>
+<span class="sd">            of things, firstly it determines the order of startup and shutdown (with resources being started after their</span>
+<span class="sd">            dependencies and shut down before them), and secondly it causes any specified dependencies to be provided</span>
+<span class="sd">            as parameters to the value(..) method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dependencies</span> <span class="o">=</span> <span class="n">dependencies</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dependencies</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dependencies</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dependencies</span>
 
 <div class="viewcode-block" id="Resource.startup"><a class="viewcode-back" href="../../api.html#approxeng.task.Resource.startup">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">startup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -472,7 +469,7 @@
         <span class="k">pass</span></div>
 
 <div class="viewcode-block" id="Resource.value"><a class="viewcode-back" href="../../api.html#approxeng.task.Resource.value">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the value of the resource. The result of this will be passed to any tasks through the world object, or to</span>
 <span class="sd">        any task functions requesting the resource through a named parameter.</span>
@@ -480,14 +477,52 @@
         <span class="k">pass</span></div></div>
 
 
+<div class="viewcode-block" id="get_resource_total_order"><a class="viewcode-back" href="../../api.html#approxeng.task.get_resource_total_order">[docs]</a><span class="k">def</span> <span class="nf">get_resource_total_order</span><span class="p">(</span><span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Resolve a set of resources into an ordering which respects any dependencies, this will also extend the supplied list</span>
+<span class="sd">    to include any transitive dependencies if required.</span>
+
+<span class="sd">    :param resources:</span>
+<span class="sd">        An iterable of resource names, or None to use all names</span>
+<span class="sd">    :return:</span>
+<span class="sd">        A list of resource names such that no resource depends on a resource later in the list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">all_resources</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">resources</span><span class="p">)</span> <span class="k">if</span> <span class="n">resources</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">RESOURCES</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_resources</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">RESOURCES</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">dependencies</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">dep_name</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">dependencies</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">dep_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_resources</span><span class="p">:</span>
+                    <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Adding transitive dependency </span><span class="si">%s</span><span class="s1"> for </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">dep_name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                    <span class="n">all_resources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dep_name</span><span class="p">)</span>
+
+    <span class="n">unresolved_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">all_resources</span><span class="p">)</span>
+    <span class="n">resolved_names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="n">unresolved_names</span><span class="p">:</span>
+        <span class="n">found_something</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">unresolved_names</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">RESOURCES</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">dependencies</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">all</span><span class="p">(</span><span class="n">dep_name</span> <span class="ow">in</span> <span class="n">resolved_names</span> <span class="k">for</span> <span class="n">dep_name</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">dependencies</span><span class="p">):</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Resolved ordering for </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+                <span class="n">resolved_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="n">found_something</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found_something</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Cyclic dependencies in requested resources </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resources</span><span class="p">)</span>
+            <span class="n">LOG</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">resolved_names</span><span class="p">:</span>
+            <span class="n">unresolved_names</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">resolved_names</span></div>
+
+
 <div class="viewcode-block" id="SimpleResource"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleResource">[docs]</a><span class="k">class</span> <span class="nc">SimpleResource</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Simple resource constructed with value, and optional setup / teardown functions. All these functions should be</span>
-<span class="sd">    no-argument ones.</span>
+<span class="sd">    Simple resource constructed with value, and optional setup / teardown functions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SimpleResource.__init__"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleResource.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value_func</span><span class="p">,</span> <span class="n">startup_func</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shutdown_func</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">SimpleResource</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SimpleResource</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">value_func</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value_func</span> <span class="o">=</span> <span class="n">value_func</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">startup_func</span> <span class="o">=</span> <span class="n">startup_func</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shutdown_func</span> <span class="o">=</span> <span class="n">shutdown_func</span></div>
@@ -500,8 +535,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shutdown_func</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shutdown_func</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SimpleResource.value"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleResource.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_func</span><span class="p">()</span></div></div>
+<div class="viewcode-block" id="SimpleResource.value"><a class="viewcode-back" href="../../api.html#approxeng.task.SimpleResource.value">[docs]</a>    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_func</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="register_resource"><a class="viewcode-back" href="../../api.html#approxeng.task.register_resource">[docs]</a><span class="k">def</span> <span class="nf">register_resource</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -620,7 +655,7 @@
                         <span class="n">return_value</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">return_value</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="c1"># Anything throwing an exception ends up here. Log it first, then delegate to a handler task</span>
-                <span class="n">LOG</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Exception raised within task look&#39;</span><span class="p">)</span>
+                <span class="n">LOG</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Exception raised within task loop&#39;</span><span class="p">)</span>
                 <span class="c1"># Shut the active task down, add the exception to the world as &#39;error&#39; and launch the error task</span>
                 <span class="n">active_task</span><span class="o">.</span><span class="n">do_shutdown</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">raise_exceptions</span><span class="p">:</span>
@@ -632,14 +667,13 @@
         <span class="n">return_value</span> <span class="o">=</span> <span class="n">te</span>
     <span class="k">finally</span><span class="p">:</span>
         <span class="c1"># Finished, shut down all resources and exit</span>
-        <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">RESOURCES</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">get_resource_total_order</span><span class="p">()):</span>
             <span class="n">RESOURCES</span><span class="p">[</span><span class="n">res</span><span class="p">]</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
     <span class="c1"># If we&#39;re raising exceptions, and there was an exception, raise it.</span>
     <span class="k">if</span> <span class="n">raise_exceptions</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">return_value</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">return_value</span>
     <span class="c1"># Otherwise return the return value and exit.</span>
     <span class="k">return</span> <span class="n">return_value</span></div>
-
 </pre></div>
 
            </div>

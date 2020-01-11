@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Change Log &mdash; Approximate Engineering - Task 0.0.4 documentation</title>
+  <title>Change Log &mdash; Approximate Engineering - Task 0.0.5 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
 
     
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Approximate Engineering - Task 0.0.4 documentation"
+          title="Search within Approximate Engineering - Task 0.0.5 documentation"
           href="_static/opensearch.xml"/>
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                0.0.4
+                0.0.5
               </div>
             
           
@@ -92,6 +92,8 @@
 <li class="toctree-l1"><a class="reference internal" href="menu.html">Menu Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-5">Version 0.0.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-4">Version 0.0.4</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-3">Version 0.0.3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1">Version 0.0.1</a></li>
@@ -161,6 +163,15 @@
             
   <div class="section" id="change-log">
 <span id="changelog-label"></span><h1>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-0-5">
+<h2>Version 0.0.5<a class="headerlink" href="#version-0-0-5" title="Permalink to this headline">¶</a></h2>
+<p>Resources can now have dependencies, and will be called with the values of any dependencies as part of the task tick.</p>
+</div>
+<div class="section" id="version-0-0-4">
+<h2>Version 0.0.4<a class="headerlink" href="#version-0-0-4" title="Permalink to this headline">¶</a></h2>
+<p>Cleaned up resource handling, tasks can now stop the loop and return a value to the caller through the
+<a class="reference internal" href="api.html#approxeng.task.TaskStop" title="approxeng.task.TaskStop"><code class="xref py py-class docutils literal notranslate"><span class="pre">approxeng.task.TaskStop</span></code></a> class.</p>
+</div>
 <div class="section" id="version-0-0-3">
 <h2>Version 0.0.3<a class="headerlink" href="#version-0-0-3" title="Permalink to this headline">¶</a></h2>
 <p>Task functions now specify resources through parameter names rather than accessing the world object directly. So

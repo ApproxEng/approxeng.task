@@ -3,6 +3,17 @@
 Change Log
 ==========
 
+Version 0.0.5
+-------------
+
+Resources can now have dependencies, and will be called with the values of any dependencies as part of the task tick.
+
+Version 0.0.4
+-------------
+
+Cleaned up resource handling, tasks can now stop the loop and return a value to the caller through the
+:class:`approxeng.task.TaskStop` class.
+
 Version 0.0.3
 -------------
 

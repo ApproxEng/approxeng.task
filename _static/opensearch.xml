@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
   <ShortName>Approximate Engineering - Task</ShortName>
-  <Description>Search Approximate Engineering - Task 0.0.4 documentation</Description>
+  <Description>Search Approximate Engineering - Task 0.0.5 documentation</Description>
   <InputEncoding>utf-8</InputEncoding>
   <Url type="text/html" method="get"
        template="https://approxeng.github.io/approxeng.task/search.html?q={searchTerms}"/>
-  <LongName>Approximate Engineering - Task 0.0.4 documentation</LongName>
+  <LongName>Approximate Engineering - Task 0.0.5 documentation</LongName>
   
 </OpenSearchDescription>

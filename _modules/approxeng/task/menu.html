@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>approxeng.task.menu &mdash; Approximate Engineering - Task 0.0.4 documentation</title>
+  <title>approxeng.task.menu &mdash; Approximate Engineering - Task 0.0.5 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
 
     
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Approximate Engineering - Task 0.0.4 documentation"
+          title="Search within Approximate Engineering - Task 0.0.5 documentation"
           href="../../../_static/opensearch.xml"/>
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                0.0.4
+                0.0.5
               </div>
             
           
@@ -242,8 +242,8 @@
 <span class="sd">        :param world:</span>
 <span class="sd">            Provides any resources needed to read the appropriate action</span>
 <span class="sd">        :return:</span>
-<span class="sd">            None for no action, or an instance of MenuAction for navigation, or an int to immediately select that index</span>
-<span class="sd">            item.</span>
+<span class="sd">            None for no action, or an instance of :class:`~approxeng.task.menu.MenuAction` for navigation, or an int to</span>
+<span class="sd">            immediately select that index item.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
@@ -268,13 +268,13 @@
 
 <div class="viewcode-block" id="KeyboardMenuTask"><a class="viewcode-back" href="../../../api.html#approxeng.task.menu.KeyboardMenuTask">[docs]</a><span class="k">class</span> <span class="nc">KeyboardMenuTask</span><span class="p">(</span><span class="n">MenuTask</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Not particularly clever implementation of MenuTask that uses print statements and input() to get menu choices. Has</span>
-<span class="sd">    the advantage of working with no additional resources, so handy for testing.</span>
+<span class="sd">    Not particularly clever implementation of :class:`~approxeng.task.menu.MenuTask` that uses print statements and</span>
+<span class="sd">    ``input()`` to get menu choices. Has the advantage of working with no additional resources, so handy for testing.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="KeyboardMenuTask.get_menu_action"><a class="viewcode-back" href="../../../api.html#approxeng.task.menu.KeyboardMenuTask.get_menu_action">[docs]</a>    <span class="k">def</span> <span class="nf">get_menu_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Print the menu, then prompt the user to select an index or, if parent is defined, &#39;u&#39; to to up.</span>
+<span class="sd">        Print the menu, then prompt the user to select an index or, if parent is defined, ``u`` to to up.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&#39;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">))</span>
@@ -292,7 +292,7 @@
 
 <div class="viewcode-block" id="KeyboardMenuTask.display_menu"><a class="viewcode-back" href="../../../api.html#approxeng.task.menu.KeyboardMenuTask.display_menu">[docs]</a>    <span class="k">def</span> <span class="nf">display_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">item_title</span><span class="p">,</span> <span class="n">item_index</span><span class="p">,</span> <span class="n">item_count</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Don&#39;t display here, because we block on input so if we did this &#39;properly&#39; we&#39;d end up waiting for the user</span>
+<span class="sd">        Don&#39;t display here, because we block on input so if we did this *properly* we&#39;d end up waiting for the user</span>
 <span class="sd">        to enter a response before then showing them the options. While this *is* amusing, it&#39;s probably not helpful.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div></div>

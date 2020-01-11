@@ -74,6 +74,34 @@ In this case we didn't provide a name - by default the resource will have the na
 
 This will make the sensor reading available under the ``lux`` property to tasks which use it.
 
+Resource Dependencies
+*********************
+
+If you need to have access to the value of a resource when computing the value of a second resource (for example, you
+might have a resource that does some processing on a camera image, but don't want to duplicate your camera frame grab
+code) you can do so by registering a function with parameters - these parameters are read as the names of resources
+which should be read before calling your resource function. Be aware that this allows you to create cyclical
+dependencies which will throw an error the first time you attempt to use them!
+
+.. code-block:: python
+
+    from approxeng.task import resource
+
+    @resource(name='simple_resource')
+    def read_basic_sensor():
+        #... read a simple sensor here
+
+    @resource(name='complex_resource')
+    def read_fused_sensor(simple_resource):
+        #... read another sensor and fuse the two sensor readings together
+
+    @task
+    def some_task(complex_resource):
+        #... use the fused sensor, basic sensor reading is supplied to the fused sensor then to this task
+
+As the example above shows the library will automatically work out which resources it needs to initialise based on the
+ones you declare in your task and any dependencies those resources themselves have.
+
 Advanced Resources
 ******************
 
@@ -81,6 +109,11 @@ Some resources may require more extensive setup than allowed by the examples abo
 implementation of the :class:`approxeng.task.Resource` class, and register it through the
 :func:`approxeng.task.register_resource` call. Implementing this class allows you to access startup and shutdown
 methods which will be called automatically when a task starts and stops using the resource.
+
+If any resources have dependencies, these are also used to calculate the startup and shutdown order, with resources
+started up such that a resource's dependencies will always have startup called before that resource, and shutdown after
+(this only applies if you're implementing your own subclasses of :class:`~approxeng.task.Resource` as no other methods
+grant access to the startup and shutdown methods)
 
 Defining Tasks
 --------------

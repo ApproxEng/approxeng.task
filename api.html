@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API &mdash; Approximate Engineering - Task 0.0.4 documentation</title>
+  <title>API &mdash; Approximate Engineering - Task 0.0.5 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
 
     
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Approximate Engineering - Task 0.0.4 documentation"
+          title="Search within Approximate Engineering - Task 0.0.5 documentation"
           href="_static/opensearch.xml"/>
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.0.4
+                0.0.5
               </div>
             
           
@@ -159,15 +159,25 @@
 <span id="api"></span><h1>API<a class="headerlink" href="#module-approxeng.task" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="approxeng.task.Resource">
-<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">Resource</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Resource" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">Resource</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">dependencies=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract base class for resources, things which are used by tasks and which may have a lifecycle. When a new task
 is started, any resources the task requires are started. On each task tick the value method is called on each
 resource and is used to populate the world dict passed to the task function. When the task is shut down each
 resource has its shutdown function called.</p>
 <dl class="method">
 <dt id="approxeng.task.Resource.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Resource.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Resource.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">dependencies=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Resource.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Resource.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name used when referencing this resource</p></li>
+<li><p><strong>dependencies</strong> – Optional list of strings containing names of resources which this resource depends upon. This does a number
+of things, firstly it determines the order of startup and shutdown (with resources being started after their
+dependencies and shut down before them), and secondly it causes any specified dependencies to be provided
+as parameters to the value(..) method.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -187,7 +197,7 @@ but code defensively here and check.</p>
 
 <dl class="method">
 <dt id="approxeng.task.Resource.value">
-<em class="property">abstract </em><code class="sig-name descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Resource.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Resource.value" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">value</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Resource.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Resource.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value of the resource. The result of this will be passed to any tasks through the world object, or to
 any task functions requesting the resource through a named parameter.</p>
 </dd></dl>
@@ -197,12 +207,21 @@ any task functions requesting the resource through a named parameter.</p>
 <dl class="class">
 <dt id="approxeng.task.SimpleResource">
 <em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">SimpleResource</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value_func</em>, <em class="sig-param">startup_func=None</em>, <em class="sig-param">shutdown_func=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleResource" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simple resource constructed with value, and optional setup / teardown functions. All these functions should be
-no-argument ones.</p>
+<dd><p>Simple resource constructed with value, and optional setup / teardown functions.</p>
 <dl class="method">
 <dt id="approxeng.task.SimpleResource.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value_func</em>, <em class="sig-param">startup_func=None</em>, <em class="sig-param">shutdown_func=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleResource.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleResource.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name used when referencing this resource</p></li>
+<li><p><strong>dependencies</strong> – Optional list of strings containing names of resources which this resource depends upon. This does a number
+of things, firstly it determines the order of startup and shutdown (with resources being started after their
+dependencies and shut down before them), and secondly it causes any specified dependencies to be provided
+as parameters to the value(..) method.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -222,7 +241,7 @@ but code defensively here and check.</p>
 
 <dl class="method">
 <dt id="approxeng.task.SimpleResource.value">
-<code class="sig-name descname">value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleResource.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleResource.value" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">value</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleResource.value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleResource.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the value of the resource. The result of this will be passed to any tasks through the world object, or to
 any task functions requesting the resource through a named parameter.</p>
 </dd></dl>
@@ -246,9 +265,9 @@ a task function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>task_function</strong> – A function, which may accept any or all of [state, world, count] parameters, and which will be called every
-tick while this task is active.</p></li>
-<li><p><strong>resources</strong> – A list of named resources to be supplied through the world parameter to the task function.</p></li>
+<li><p><strong>task_function</strong> – A function which will be called every tick while this task is active. If the function accepts parameters,
+these are interpreted as the names of resources required by the task, and provided when the function is
+called.</p></li>
 <li><p><strong>name</strong> – The name of the task, this is only really used internally for logging, the canonical name is defined by the
 key under which the task is registered.</p></li>
 </ul>
@@ -279,7 +298,7 @@ key under which the task is registered.</p></li>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The return value from the task function. As elsewhere, this is interpreted as follows:
 None - don’t change anything, keep this task running, call it again
-True - exit from the task processing loop, shutting down the process
+TaskStop - exit from the task processing loop, shutting down the process
 Task or String - shut this task down, set the named or provided task as the current task</p>
 </dd>
 </dl>
@@ -406,6 +425,21 @@ otherwise it’ll be empty.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="approxeng.task.get_resource_total_order">
+<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">get_resource_total_order</code><span class="sig-paren">(</span><em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#get_resource_total_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.get_resource_total_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve a set of resources into an ordering which respects any dependencies, this will also extend the supplied list
+to include any transitive dependencies if required.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>resources</strong> – An iterable of resource names, or None to use all names</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of resource names such that no resource depends on a resource later in the list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="approxeng.task.register_resource">
 <code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">register_resource</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#register_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.register_resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Explicitly register a value as a resource. If the value is a function then wrap it up as the value() method of a
@@ -476,19 +510,19 @@ name if explicitly provided, or the name of the function otherwise.</p>
 <span class="target" id="module-approxeng.task.menu"></span><dl class="class">
 <dt id="approxeng.task.menu.KeyboardMenuTask">
 <em class="property">class </em><code class="sig-prename descclassname">approxeng.task.menu.</code><code class="sig-name descname">KeyboardMenuTask</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">title</em>, <em class="sig-param">parent_task</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#KeyboardMenuTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.KeyboardMenuTask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Not particularly clever implementation of MenuTask that uses print statements and input() to get menu choices. Has
-the advantage of working with no additional resources, so handy for testing.</p>
+<dd><p>Not particularly clever implementation of <a class="reference internal" href="#approxeng.task.menu.MenuTask" title="approxeng.task.menu.MenuTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">MenuTask</span></code></a> that uses print statements and
+<code class="docutils literal notranslate"><span class="pre">input()</span></code> to get menu choices. Has the advantage of working with no additional resources, so handy for testing.</p>
 <dl class="method">
 <dt id="approxeng.task.menu.KeyboardMenuTask.display_menu">
 <code class="sig-name descname">display_menu</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">title</em>, <em class="sig-param">item_title</em>, <em class="sig-param">item_index</em>, <em class="sig-param">item_count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#KeyboardMenuTask.display_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.KeyboardMenuTask.display_menu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Don’t display here, because we block on input so if we did this ‘properly’ we’d end up waiting for the user
+<dd><p>Don’t display here, because we block on input so if we did this <em>properly</em> we’d end up waiting for the user
 to enter a response before then showing them the options. While this <em>is</em> amusing, it’s probably not helpful.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="approxeng.task.menu.KeyboardMenuTask.get_menu_action">
 <code class="sig-name descname">get_menu_action</code><span class="sig-paren">(</span><em class="sig-param">world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#KeyboardMenuTask.get_menu_action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.KeyboardMenuTask.get_menu_action" title="Permalink to this definition">¶</a></dt>
-<dd><p>Print the menu, then prompt the user to select an index or, if parent is defined, ‘u’ to to up.</p>
+<dd><p>Print the menu, then prompt the user to select an index or, if parent is defined, <code class="docutils literal notranslate"><span class="pre">u</span></code> to to up.</p>
 </dd></dl>
 
 </dd></dl>
@@ -547,8 +581,8 @@ will be accessible from the task logic.</p></li>
 <dd class="field-odd"><p><strong>world</strong> – Provides any resources needed to read the appropriate action</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None for no action, or an instance of MenuAction for navigation, or an int to immediately select that index
-item.</p>
+<dd class="field-even"><p>None for no action, or an instance of <a class="reference internal" href="#approxeng.task.menu.MenuAction" title="approxeng.task.menu.MenuAction"><code class="xref py py-class docutils literal notranslate"><span class="pre">MenuAction</span></code></a> for navigation, or an int to
+immediately select that index item.</p>
 </dd>
 </dl>
 </dd></dl>
