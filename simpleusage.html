@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Simple Usage &mdash; Approximate Engineering - Task 0.0.3 documentation</title>
+  <title>Simple Usage &mdash; Approximate Engineering - Task 0.0.4 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
 
     
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Approximate Engineering - Task 0.0.3 documentation"
+          title="Search within Approximate Engineering - Task 0.0.4 documentation"
           href="_static/opensearch.xml"/>
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.0.3
+                0.0.4
               </div>
             
           
@@ -349,8 +349,10 @@ tasks, and control that switches between them as follows:</p>
 that something else is depends on what you return.</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>If you return True, the run command will finish, no more tasks will be run.</p></li>
-<li><p>If you return a String matching the name of another task, that task becomes the current one.</p></li>
+<li><p>If you return a string matching the name of another task, that task becomes the current one.</p></li>
+<li><p>If you return an instance of <a class="reference internal" href="api.html#approxeng.task.Task" title="approxeng.task.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a>, that task becomes the current one.</p></li>
+<li><p>If you return an instance of <a class="reference internal" href="api.html#approxeng.task.TaskStop" title="approxeng.task.TaskStop"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskStop</span></code></a>, the loop exits. If the instance wraps a value
+the wrapped value will be returned by the <a class="reference internal" href="api.html#approxeng.task.run" title="approxeng.task.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> function.</p></li>
 </ul>
 </div></blockquote>
 <p>So in this case, the light_monitor waits for the light to get really bright, then switches control to the ‘run_away’

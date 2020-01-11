@@ -197,8 +197,10 @@ tasks, and control that switches between them as follows:
 If your task function returns a value, it indicates that it wants to stop that task and do something else. Exactly what
 that something else is depends on what you return.
 
-    * If you return True, the run command will finish, no more tasks will be run.
-    * If you return a String matching the name of another task, that task becomes the current one.
+    * If you return a string matching the name of another task, that task becomes the current one.
+    * If you return an instance of :class:`~approxeng.task.Task`, that task becomes the current one.
+    * If you return an instance of :class:`~approxeng.task.TaskStop`, the loop exits. If the instance wraps a value
+      the wrapped value will be returned by the :func:`~approxeng.task.run` function.
 
 So in this case, the light_monitor waits for the light to get really bright, then switches control to the 'run_away'
 task, which in turn waits for the light to get nice and dim and hands back control to the monitor.
