@@ -49,7 +49,7 @@ class MenuTask(Task):
     def shutdown(self):
         pass
 
-    def tick(self, world, count):
+    def tick(self, world):
         action = self.get_menu_action(world)
         if action is not None:
             if action is MenuAction.next:

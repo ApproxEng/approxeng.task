@@ -8,9 +8,9 @@ author = u'Tom Oinn'
 # built documents.
 #
 # The short X.Y version.
-version = '0.0.2'
+version = '0.0.4'
 # The full version, including alpha/beta/rc tags.
-release = '0.0.2'
+release = '0.0.4'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -113,7 +113,7 @@ pygments_style = 'sphinx'
 # If true, keep warnings as "system message" paragraphs in the built documents.
 # keep_warnings = False
 
-# If true, `todo` and `todoList` produce output, else they produce nothing.
+# If true, `to do` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
 # -- Options for HTML output ----------------------------------------------

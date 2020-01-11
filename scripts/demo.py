@@ -1,40 +1,39 @@
-from approxeng.task import task, TASKS, resource, RESOURCES, register_resource, run
+from approxeng.task import task, TASKS, resource, RESOURCES, register_resource, run, TaskException
 import logging
 import cachetools.func
 from time import sleep
 
 LOG = logging.getLogger('demo')
 
-logging.basicConfig(level=logging.INFO)
+#logging.basicConfig(level=logging.INFO)
 
 
-@resource(name='list')
+@resource(name='list_resource')
 def bar():
     return ['a', 'b', 'c']
 
 
-register_resource('string', 'a value')
+register_resource('string_resource', 'a value')
 
 
-@task(name='first_task', resources='list')
-def root(world, count, state):
+@task(name='first_task')
+def root(list_resource, task_count):
     sleep(0.1)
-    LOG.info(count)
-    LOG.info(world.list)
-    if count > 2:
+    LOG.info(task_count)
+    LOG.info(list_resource)
+    if task_count > 2:
         return 'second_task'
 
 
-@task(resources=['string'])
-def second_task(world):
-    LOG.info('Ooh, a string "%s", too exciting, sleeping for a bit', world.string)
-    LOG.info(world._dict)
+@task
+def second_task(string_resource):
+    LOG.info('Ooh, a string "%s", too exciting, sleeping for a bit', string_resource)
+    # LOG.info(world._dict)
     sleep(0.5)
     raise Exception("foo")
-
 
 
 LOG.info(TASKS)
 LOG.info(RESOURCES)
 
-run(root_task='first_task')
+run(root_task='first_task', raise_exceptions=False)

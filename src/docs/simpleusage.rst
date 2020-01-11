@@ -21,9 +21,9 @@ Constant Resources
 ******************
 
 This is the simplest kind of resource, it never changes but we want to give tasks access to it. All resources have a
-name, which is used to retrieve them in a task. In this case we've called the motor class 'motors' (this could be the
-object returned from initialising an explorer HAT, or any other motor driver, or it could be something you've written
-yourself, the task framework doesn't care!)
+name, which is used to retrieve them in a task. In this case we've called the motor resource ``motors`` (this could be
+the object returned from initialising an explorer HAT, or any other motor driver, or it could be something you've
+written yourself, the task framework doesn't care!)
 
 .. code-block:: python
 
@@ -58,7 +58,7 @@ task is the result of the function:
         return sensor_reading
 
 In this case we didn't provide a name - by default the resource will have the name of the function, so in this case
-'light_sensor' but you can also explicitly name it:
+``light_sensor`` but you can also explicitly name it:
 
 .. code-block:: python
 
@@ -72,15 +72,15 @@ In this case we didn't provide a name - by default the resource will have the na
         # result will be made available to the task
         return sensor_reading
 
-This will make the sensor reading available under the 'lux' property to tasks which use it.
+This will make the sensor reading available under the ``lux`` property to tasks which use it.
 
 Advanced Resources
 ******************
 
 Some resources may require more extensive setup than allowed by the examples above. For these you can create your own
-implementation of the :class:`~approxeng.task.Resource` class, and register it through the register_resource call.
-Implementing this class allows you to access startup and shutdown methods which will be called automatically when a task
-starts and stops using the resource.
+implementation of the :class:`approxeng.task.Resource` class, and register it through the
+:func:`approxeng.task.register_resource` call. Implementing this class allows you to access startup and shutdown
+methods which will be called automatically when a task starts and stops using the resource.
 
 Defining Tasks
 --------------
@@ -104,13 +104,14 @@ Simple Tasks
     # Run the task
     run(root_task='some_task')
 
-This code does two things. Firstly we define a task - in this case this is just a function which prints 'Task running'
-and sleeps for a second. Not terribly exciting! It is, however, a fully functional task. Note the @task decorator - this
-tells the framework that it's a task, and, just like the resources, it has a default name which is the same as the
-function.
+This code does two things. Firstly we define a task - in this case this is just a function which prints *Task running*
+and sleeps for a second. Not terribly exciting! It is, however, a fully functional task. Note the
+:func:`~approxeng.task.task` decorator on ``some_task``, it appears above as ``@task`` -
+this tells the framework that it's a task, and, just like the resources, the registered task has a default name which is
+the same as the name of the function.
 
 Secondly, we run the task. The root task is the first task to run (tasks can switch to other tasks, we'll look at that
-next). Because there's no logic here to switch tasks or to exit, this will run forever and print 'Task running' every
+next). Because there's no logic here to switch tasks or to exit, this will run forever and print *Task running* every
 second. It also doesn't use any resource, so it's not a great example but you have to start somewhere. Let's fix that.
 
 .. code-block:: python
@@ -124,55 +125,31 @@ second. It also doesn't use any resource, so it's not a great example but you ha
         return sensor_reading
 
     @task(name='light_monitor')
-    def light_monitoring_task(world):
-        light_reading = world.lux
-        print('Light reading is {}'.format(light_reading))
+    def light_monitoring_task(lux):
+        print('Light reading is {}'.format(lux))
         sleep(1)
 
     run(root_task='light_monitor')
 
-This code is very similar to the previous example, but we've also defined a resource. By doing this, and then adding the
-'world' parameter to our task function, we've told the framework a few things:
+This code is very similar to the previous example, but the task function has a parameter ``lux``. If you specify one or
+more parameters in your task function you're asking the library to make sure the resources with the same names as
+those parameters are initialised when your task starts, shut down when it stops, and made available each time your task
+is called.
 
-    1. There's a resource, called 'lux', that reads the light sensor when called.
-    2. We want access to the world - a special object that provides all resources to a task
-    3. Each time the task is called, we want to have up-to-date values for each of the resources
+In this case, the library will call your ``read_light_sensor()`` function and pass the result into the
+``light_monitoring_task(lux)`` call.
 
-Sometimes reading sensors can be time consuming. There are a few ways to make this easier, you could have the resource
-cache its value and only actually update from the hardware at a certain interval, but the most obvious saving is not to
-even use resources we don't actually need. Suppose the robot has a bunch of different sensors, it might have a compass,
-light meter, wheel encoders, rangefinders etc. If a task doesn't need the rangefinder we should be able to just ignore
-it rather than waste time reading from it. You can do this by adding a 'resources' property to the task annotation.
+Simple Stateful Tasks and Task Counts
+*************************************
 
-.. code-block:: python
+In addition to accessing resources through named parameters on your task function you also always have access to three
+additional values:
 
-    from approxeng.task import task, resource, run
-    import time
-
-    @resource(name='expensive_sensor')
-    def read_the_expensive_sensor
-        # This takes aaaaages...
-        # ...
-
-    @resource(name='lux')
-    def read_light_sensor():
-        sensor_reading = ...
-        return sensor_reading
-
-    @task(name='light_monitor', resources=['lux'])
-    def light_monitoring_task(world):
-        light_reading = world.lux
-        print('Light reading is {}'.format(light_reading))
-        sleep(1)
-
-    run(root_task='light_monitor')
-
-We've added a (fake) expensive sensor, we want to avoid reading this unless we need it! By setting 'resources=['lux']'
-on the task we're telling the framework that the world only needs to contain the lux resource, and not the
-expensive_sensor one. This means when this task is running we never touch the expensive sensor.
-
-By default, if you don't specify a list of needed resources, all available ones are used. Be careful you're not wasting
-your robot's time with something it doesn't need!
+    * ``task_count`` is an integer which starts at 0 when your task is started, and increments after each call.
+    * ``global_count`` is an integer which starts at 0 when the library is loaded, and increments after each call.
+    * ``task_state`` is a dict, initialised to be empty when your task is started and preserved across subsequent calls. You
+      can use this if you need to carry state across multiple calls to your task. This is cleared when the task is shut
+      down.
 
 Switching Tasks
 ***************
@@ -199,20 +176,19 @@ tasks, and control that switches between them as follows:
     register_resource(name='motors', value=motor_board)
 
     # Task to wait for the light to get too bright
-    @task(name='light_monitor', resources=['lux'])
-    def light_monitoring_task(world):
-        light_reading = world.lux
-        if light_reading > 9000:
+    @task(name='light_monitor')
+    def light_monitoring_task(lux):
+        if lux > 9000:
             return 'run_away'
         sleep(1)
 
-    @task(name='run_away', resources=['lux','motors'])
-    def run_away_and_hide(world)
+    @task(name='run_away')
+    def run_away_and_hide(motors, lux)
         # Fire up the motors and get out of here!
-        world.motors.go_really_fast()
-        light_reading = world.lux
-        if light_reading < 1000:
-            # Ah, soothing darkness
+        motors.go_really_fast()
+        if lux < 1000:
+            # Ah, soothing darkness. Stop the motors and start monitoring
+            motors.stop()
             return 'light_monitor'
         sleep(1)
 
@@ -221,8 +197,10 @@ tasks, and control that switches between them as follows:
 If your task function returns a value, it indicates that it wants to stop that task and do something else. Exactly what
 that something else is depends on what you return.
 
-    * If you return True, the run command will finish, no more tasks will be run.
-    * If you return a String matching the name of another task, that task becomes the current one.
+    * If you return a string matching the name of another task, that task becomes the current one.
+    * If you return an instance of :class:`~approxeng.task.Task`, that task becomes the current one.
+    * If you return an instance of :class:`~approxeng.task.TaskStop`, the loop exits. If the instance wraps a value
+      the wrapped value will be returned by the :func:`~approxeng.task.run` function.
 
 So in this case, the light_monitor waits for the light to get really bright, then switches control to the 'run_away'
 task, which in turn waits for the light to get nice and dim and hands back control to the monitor.
