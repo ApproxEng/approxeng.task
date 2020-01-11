@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Change Log &mdash; Approximate Engineering - Task 0.0.2 documentation</title>
+  <title>Change Log &mdash; Approximate Engineering - Task 0.0.3 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
 
     
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Approximate Engineering - Task 0.0.2 documentation"
+          title="Search within Approximate Engineering - Task 0.0.3 documentation"
           href="_static/opensearch.xml"/>
 
   
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                0.0.2
+                0.0.3
               </div>
             
           
@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="menu.html">Menu Generation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Change Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#version-0-0-3">Version 0.0.3</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-2">Version 0.0.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#version-0-0-1">Version 0.0.1</a></li>
 </ul>
@@ -160,6 +161,22 @@
             
   <div class="section" id="change-log">
 <span id="changelog-label"></span><h1>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-0-0-3">
+<h2>Version 0.0.3<a class="headerlink" href="#version-0-0-3" title="Permalink to this headline">¶</a></h2>
+<p>Task functions now specify resources through parameter names rather than accessing the world object directly. So
+instead of:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@task</span><span class="p">(</span><span class="n">resources</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lux&#39;</span><span class="p">])</span>
+<span class="n">check_light_level</span><span class="p">(</span><span class="n">world</span><span class="p">)</span>
+    <span class="n">light_level</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">lux</span>
+</pre></div>
+</div>
+<p>You can now do:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@task</span>
+<span class="n">check_light_level</span><span class="p">(</span><span class="n">lux</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And the light level is passed directly to the task function without any need to reference the world object to get it.</p>
+</div>
 <div class="section" id="version-0-0-2">
 <h2>Version 0.0.2<a class="headerlink" href="#version-0-0-2" title="Permalink to this headline">¶</a></h2>
 <p>Added menu automation.</p>
@@ -190,7 +207,7 @@
     <p>
         &copy; Copyright 2019, 2020 Tom Oinn
       <span class="lastupdated">
-        Last updated on Jan 10, 2020.
+        Last updated on Jan 11, 2020.
       </span>
 
     </p>

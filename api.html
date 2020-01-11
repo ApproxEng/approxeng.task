@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API &mdash; Approximate Engineering - Task 0.0.2 documentation</title>
+  <title>API &mdash; Approximate Engineering - Task 0.0.3 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
 
     
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Approximate Engineering - Task 0.0.2 documentation"
+          title="Search within Approximate Engineering - Task 0.0.3 documentation"
           href="_static/opensearch.xml"/>
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.0.2
+                0.0.3
               </div>
             
           
@@ -158,63 +158,6 @@
   <div class="section" id="module-approxeng.task">
 <span id="api"></span><h1>API<a class="headerlink" href="#module-approxeng.task" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="approxeng.task.ExitTask">
-<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">ExitTask</code><a class="reference internal" href="_modules/approxeng/task.html#ExitTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Switch control to this task to exit the task loop. Registered with the name ‘exit’ for convenience</p>
-<dl class="method">
-<dt id="approxeng.task.ExitTask.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#ExitTask.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new task</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – Name used internally by this task</p></li>
-<li><p><strong>resources</strong> – A string, or list of strings, containing names of resources which must be available for this task to
-function. Any such resources will be initialised and shutdown alongside the task itself. If this is
-set to None then all resources registered will be available, otherwise only those explicitly named here
-will be accessible from the task logic.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="approxeng.task.ExitTask.shutdown">
-<code class="sig-name descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#ExitTask.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask.shutdown" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement to provide shutdown logic for the task.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="approxeng.task.ExitTask.startup">
-<code class="sig-name descname">startup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#ExitTask.startup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask.startup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implement to provide startup logic for the task.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="approxeng.task.ExitTask.tick">
-<code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#ExitTask.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.ExitTask.tick" title="Permalink to this definition">¶</a></dt>
-<dd><p>Called every tick, do your stuff here!</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>world</strong> – A world object, access any required resources through properties on this object.</p></li>
-<li><p><strong>count</strong> – The global tick count.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Used to signal what to do at the end of the tick:
-None - continue, call the same task again
-True - exit from the task loop. Probably don’t do this, instead…
-…String or Task - shut this task down and set the specified task (name or direct reference) to be the
-active one. If you want to exit the best way to do so is to delegate to the exit task, or to a custom task
-which gracefully shuts down your hardware before exiting from the loop.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="approxeng.task.Resource">
 <em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">Resource</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Abstract base class for resources, things which are used by tasks and which may have a lifecycle. When a new task
@@ -244,7 +187,7 @@ no-argument ones.</p>
 
 <dl class="class">
 <dt id="approxeng.task.SimpleTask">
-<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">SimpleTask</code><span class="sig-paren">(</span><em class="sig-param">task_function</em>, <em class="sig-param">resources</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">SimpleTask</code><span class="sig-paren">(</span><em class="sig-param">task_function</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class that wraps a single task function, including basic state consisting of an initially blank dict that
 the task can safely write to and read from for the duration of the run.</p>
 <p>The function wrapped by the task can accept any or all of the following parameters:</p>
@@ -253,7 +196,7 @@ world : passed the world state, consisting of a set of named resources as reques
 count : monotonically ascending tick count across the entire application.</p>
 <dl class="method">
 <dt id="approxeng.task.SimpleTask.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">task_function</em>, <em class="sig-param">resources</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">task_function</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new simple task instance, this is generally going to be called from within the library when wrapping
 a task function.</p>
 <dl class="field-list simple">
@@ -283,14 +226,11 @@ key under which the task is registered.</p></li>
 
 <dl class="method">
 <dt id="approxeng.task.SimpleTask.tick">
-<code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask.tick" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#SimpleTask.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.SimpleTask.tick" title="Permalink to this definition">¶</a></dt>
 <dd><p>A single task tick. Calls the task function, supplying it with whatever parameters it needs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>world</strong> – World state, set of resources accessible as properties.</p></li>
-<li><p><strong>count</strong> – Global tick counter, increases by 1 each time</p></li>
-</ul>
+<dd class="field-odd"><p><strong>world</strong> – World state, set of resources accessible as properties.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The return value from the task function. As elsewhere, this is interpreted as follows:
@@ -309,11 +249,11 @@ Task or String - shut this task down, set the named or provided task as the curr
 <dd><p>Abstract base class for tasks, things which are called repeatedly to perform some higher function.</p>
 <dl class="class">
 <dt id="approxeng.task.Task.World">
-<em class="property">class </em><code class="sig-name descname">World</code><span class="sig-paren">(</span><em class="sig-param">resources</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.World"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.World" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">World</code><span class="sig-paren">(</span><em class="sig-param">resources</em>, <em class="sig-param">global_count</em>, <em class="sig-param">task_count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.World"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.World" title="Permalink to this definition">¶</a></dt>
 <dd><p>The world that the task tick sees, consists of all resources the task said it needed.</p>
 <dl class="method">
 <dt id="approxeng.task.Task.World.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">resources</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.World.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.World.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">resources</em>, <em class="sig-param">global_count</em>, <em class="sig-param">task_count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.World.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.World.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
 </dd></dl>
 
@@ -351,7 +291,7 @@ implementation. No need to call this explicitly as it’s called if the task isn
 
 <dl class="method">
 <dt id="approxeng.task.Task.do_tick">
-<code class="sig-name descname">do_tick</code><span class="sig-paren">(</span><em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.do_tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.do_tick" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">do_tick</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.do_tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.do_tick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start up the task, if needed, then call the tick method, passing in the world and tick count.</p>
 </dd></dl>
 
@@ -376,14 +316,11 @@ containing all the registered resource names.</p>
 
 <dl class="method">
 <dt id="approxeng.task.Task.tick">
-<em class="property">abstract </em><code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.tick" title="Permalink to this definition">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#Task.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.Task.tick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called every tick, do your stuff here!</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>world</strong> – A world object, access any required resources through properties on this object.</p></li>
-<li><p><strong>count</strong> – The global tick count.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>world</strong> – A world object, access any required resources through properties on this object.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Used to signal what to do at the end of the tick:
@@ -413,7 +350,7 @@ then wrap it in a function that always returns that value, then wrap that up in 
 
 <dl class="function">
 <dt id="approxeng.task.register_task">
-<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">register_task</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#register_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.register_task" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">register_task</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#register_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.register_task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Explicitly register a task, either from a function or from an instance of Task</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -423,10 +360,6 @@ then wrap it in a function that always returns that value, then wrap that up in 
 object. You may want to use the latter, more verbose, form if extensive setup or custom state handling is
 needed by your task, although in general most of such handling should be done with resources and tasks
 themselves should remain largely state free.</p></li>
-<li><p><strong>resources</strong> – A string, or list of strings, containing the names of resources required for this task to run. These resources
-will be initialised at the same time as the task itself, and shut down alongside it where appropriate. They are
-accessible from the world object passed to the tick function. This is not used if a Task object is passed, as
-these already specify their resource lists.</p></li>
 </ul>
 </dd>
 </dl>
@@ -463,7 +396,7 @@ cases where you absolutely want to bail if hardware isn’t available (joystick 
 
 <dl class="function">
 <dt id="approxeng.task.task">
-<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">task</code><span class="sig-paren">(</span><em class="sig-param">_func=None</em>, <em class="sig-param">*</em>, <em class="sig-param">name=None</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.task" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">approxeng.task.</code><code class="sig-name descname">task</code><span class="sig-paren">(</span><em class="sig-param">_func=None</em>, <em class="sig-param">*</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task.html#task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.task" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to indicate that a function is a simple task. The function will be registered, using either the
 name if explicitly provided, or the name of the function otherwise.</p>
 </dd></dl>
@@ -568,14 +501,11 @@ item.</p>
 
 <dl class="method">
 <dt id="approxeng.task.menu.MenuTask.tick">
-<code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em>, <em class="sig-param">count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask.tick" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tick</code><span class="sig-paren">(</span><em class="sig-param">world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#MenuTask.tick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.MenuTask.tick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Called every tick, do your stuff here!</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>world</strong> – A world object, access any required resources through properties on this object.</p></li>
-<li><p><strong>count</strong> – The global tick count.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>world</strong> – A world object, access any required resources through properties on this object.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Used to signal what to do at the end of the tick:
@@ -648,7 +578,7 @@ which gracefully shuts down your hardware before exiting from the loop.</p>
     <p>
         &copy; Copyright 2019, 2020 Tom Oinn
       <span class="lastupdated">
-        Last updated on Jan 10, 2020.
+        Last updated on Jan 11, 2020.
       </span>
 
     </p>
