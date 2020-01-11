@@ -205,13 +205,13 @@ two tasks:</p>
       <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_b</span>
 </pre></div>
 </div>
-<p>For those not familiar with YAML, this is a single item list. That item is a dictionary, with keys ‘name’, ‘title’, and
-‘items’. ‘items’ is a list of dictionaries with keys ‘title’ and ‘task’ (in this case). Hopefully it should be possible
+<p>For those not familiar with YAML, this is a single item list. That item is a dictionary, with keys <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">title</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">items</span></code>. <code class="docutils literal notranslate"><span class="pre">items</span></code> is a list of dictionaries with keys <code class="docutils literal notranslate"><span class="pre">title</span></code> and <code class="docutils literal notranslate"><span class="pre">task</span></code> (in this case). Hopefully it should be possible
 to follow what’s happening!</p>
-<p>There’s a single menu defined here. It’s called ‘top_menu’, and should display ‘Main Menu’ in some form when active. It
-has two possible options, ‘First task’ and ‘Second task’, which will launch ‘task_a’ and ‘task_b’ respectively when
+<p>There’s a single menu defined here. It’s called <code class="docutils literal notranslate"><span class="pre">top_menu</span></code>, and should display <em>Main Menu</em> in some form when active. It
+has two possible options, <em>First task</em> and <em>Second task</em>, which will launch <code class="docutils literal notranslate"><span class="pre">task_a</span></code> and <code class="docutils literal notranslate"><span class="pre">task_b</span></code> respectively when
 selected. When passed in to <a class="reference internal" href="api.html#approxeng.task.menu.register_menu_tasks_from_yaml" title="approxeng.task.menu.register_menu_tasks_from_yaml"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_menu_tasks_from_yaml()</span></code></a> this will register a single task
-called ‘top_menu’, this can then be launched like any other task.</p>
+called <code class="docutils literal notranslate"><span class="pre">top_menu</span></code>, this can then be launched like any other task.</p>
 <div class="section" id="multiple-menus">
 <h3>Multiple Menus<a class="headerlink" href="#multiple-menus" title="Permalink to this headline">¶</a></h3>
 <p>You can specify multiple menus in a single file, just add more items to the top level list:</p>
@@ -234,8 +234,8 @@ called ‘top_menu’, this can then be launched like any other task.</p>
 </pre></div>
 </div>
 <p>This defines two menus, and also provides navigation between them. There’s nothing special about menus, they just turn
-into named tasks so in this case the item ‘Go to a submenu’ activates a task called ‘sub_menu’, and the second menu in
-this YAML definition creates a task called ‘sub_menu’, which in turn has an item ‘Back’ which activates the ‘top_menu’
+into named tasks so in this case the item <em>Go to a submenu</em> activates a task called <code class="docutils literal notranslate"><span class="pre">sub_menu</span></code>, and the second menu in
+this YAML definition creates a task called <code class="docutils literal notranslate"><span class="pre">sub_menu</span></code>, which in turn has an item <em>Back</em> which activates the <code class="docutils literal notranslate"><span class="pre">top_menu</span></code>
 task. So we have a nested menu structure, but it’s a bit clunky.</p>
 </div>
 <div class="section" id="more-concise-nested-menus">
@@ -264,8 +264,8 @@ can’t manually activate that sub-menu. Not an issue here, if you need to do th
               <span class="nt">task</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">task_d</span>
 </pre></div>
 </div>
-<p>With a nested definition like this you don’t have to define the ‘back’ task, as the menu system knows what the parent
-menu is and handles it with a special ‘up’ action.</p>
+<p>With a nested definition like this you don’t have to define the <em>back</em> task, as the menu system knows what the parent
+menu is and handles it with a special <em>up</em> action.</p>
 </div>
 </div>
 <div class="section" id="implementing-a-menutask">
@@ -311,8 +311,8 @@ item.</p>
 
 </dd></dl>
 
-<p>As an example, let’s suppose we’re using approxeng.input as the input library, and that we’ve put the controller object
-into the world as a resource called joystick. The implementation of the
+<p>As an example, let’s suppose we’re using <code class="docutils literal notranslate"><span class="pre">approxeng.input</span></code> as the input library, and that we’ve put the controller
+object into the world as a resource called <code class="docutils literal notranslate"><span class="pre">joystick</span></code>. The implementation of the
 <a class="reference internal" href="api.html#approxeng.task.menu.MenuTask.get_menu_action" title="approxeng.task.menu.MenuTask.get_menu_action"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_menu_action()</span></code></a>  might look like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">approxeng.task.menu</span> <span class="kn">import</span> <span class="n">MenuClass</span><span class="p">,</span> <span class="n">MenuAction</span>
 
@@ -337,7 +337,7 @@ into the world as a resource called joystick. The implementation of the
 button presses. It then checks in turn for the d-pad left, right, and up buttons, and for the cross button. And that’s
 all you need to do for navigation.</p>
 <p>Next suppose we have a display module attached, it’s a simple object with a couple of methods used to set the two lines
-of text. We register it as a resource called ‘display’ and use it to implement
+of text. We register it as a resource called <code class="docutils literal notranslate"><span class="pre">display</span></code> and use it to implement
 <a class="reference internal" href="api.html#approxeng.task.menu.MenuTask.display_menu" title="approxeng.task.menu.MenuTask.display_menu"><code class="xref py py-meth docutils literal notranslate"><span class="pre">display_menu()</span></code></a> in our new class to finish it:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">approxeng.task.menu</span> <span class="kn">import</span> <span class="n">MenuClass</span><span class="p">,</span> <span class="n">MenuAction</span>
 
@@ -390,8 +390,8 @@ dictionary of menus directly, the structure is exactly the same in both cases.</
 </pre></div>
 </div>
 <p>This loads in the definition from the file, creates tasks for each menu, configures the menu system to use the menu
-class you defined, and to make the ‘joystick’ and ‘display’ resources available to those tasks when running. It then
-runs the task called ‘top_menu’, which is the task for the menu with the same name in that file.</p>
+class you defined, and to make the <code class="docutils literal notranslate"><span class="pre">joystick</span></code> and <code class="docutils literal notranslate"><span class="pre">display</span></code> resources available to those tasks when running. It then
+runs the task called <code class="docutils literal notranslate"><span class="pre">top_menu</span></code>, which is the task for the menu with that name in that file.</p>
 <p>Note - you don’t ever construct an instance of your menu class, the library does that for you. Just pass in the actual
 class (so no brackets!).</p>
 </div>

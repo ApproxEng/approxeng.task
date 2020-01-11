@@ -45,14 +45,14 @@ two tasks:
         - title: Second task
           task: task_b
 
-For those not familiar with YAML, this is a single item list. That item is a dictionary, with keys 'name', 'title', and
-'items'. 'items' is a list of dictionaries with keys 'title' and 'task' (in this case). Hopefully it should be possible
+For those not familiar with YAML, this is a single item list. That item is a dictionary, with keys ``name``, ``title``, and
+``items``. ``items`` is a list of dictionaries with keys ``title`` and ``task`` (in this case). Hopefully it should be possible
 to follow what's happening!
 
-There's a single menu defined here. It's called 'top_menu', and should display 'Main Menu' in some form when active. It
-has two possible options, 'First task' and 'Second task', which will launch 'task_a' and 'task_b' respectively when
+There's a single menu defined here. It's called ``top_menu``, and should display *Main Menu* in some form when active. It
+has two possible options, *First task* and *Second task*, which will launch ``task_a`` and ``task_b`` respectively when
 selected. When passed in to :func:`~approxeng.task.menu.register_menu_tasks_from_yaml` this will register a single task
-called 'top_menu', this can then be launched like any other task.
+called ``top_menu``, this can then be launched like any other task.
 
 Multiple Menus
 **************
@@ -79,8 +79,8 @@ You can specify multiple menus in a single file, just add more items to the top 
           task: task_d
 
 This defines two menus, and also provides navigation between them. There's nothing special about menus, they just turn
-into named tasks so in this case the item 'Go to a submenu' activates a task called 'sub_menu', and the second menu in
-this YAML definition creates a task called 'sub_menu', which in turn has an item 'Back' which activates the 'top_menu'
+into named tasks so in this case the item *Go to a submenu* activates a task called ``sub_menu``, and the second menu in
+this YAML definition creates a task called ``sub_menu``, which in turn has an item *Back* which activates the ``top_menu``
 task. So we have a nested menu structure, but it's a bit clunky.
 
 More Concise Nested Menus
@@ -109,8 +109,8 @@ The following will produce the same menu structure as the previous example, but 
                 - title: Do another thing
                   task: task_d
 
-With a nested definition like this you don't have to define the 'back' task, as the menu system knows what the parent
-menu is and handles it with a special 'up' action.
+With a nested definition like this you don't have to define the *back* task, as the menu system knows what the parent
+menu is and handles it with a special *up* action.
 
 
 Implementing a MenuTask
@@ -123,8 +123,8 @@ To connect the menu system to your control and display resources you'll need to 
     :members: get_menu_action, display_menu
     :noindex:
 
-As an example, let's suppose we're using approxeng.input as the input library, and that we've put the controller object
-into the world as a resource called joystick. The implementation of the
+As an example, let's suppose we're using ``approxeng.input`` as the input library, and that we've put the controller
+object into the world as a resource called ``joystick``. The implementation of the
 :meth:`~approxeng.task.menu.MenuTask.get_menu_action`  might look like this:
 
 .. code-block:: python
@@ -152,7 +152,7 @@ button presses. It then checks in turn for the d-pad left, right, and up buttons
 all you need to do for navigation.
 
 Next suppose we have a display module attached, it's a simple object with a couple of methods used to set the two lines
-of text. We register it as a resource called 'display' and use it to implement
+of text. We register it as a resource called ``display`` and use it to implement
 :meth:`~approxeng.task.menu.MenuTask.display_menu` in our new class to finish it:
 
 .. code-block:: python
@@ -210,8 +210,8 @@ dictionary of menus directly, the structure is exactly the same in both cases.
     run(root_task='top_menu')
 
 This loads in the definition from the file, creates tasks for each menu, configures the menu system to use the menu
-class you defined, and to make the 'joystick' and 'display' resources available to those tasks when running. It then
-runs the task called 'top_menu', which is the task for the menu with the same name in that file.
+class you defined, and to make the ``joystick`` and ``display`` resources available to those tasks when running. It then
+runs the task called ``top_menu``, which is the task for the menu with that name in that file.
 
 Note - you don't ever construct an instance of your menu class, the library does that for you. Just pass in the actual
 class (so no brackets!).
