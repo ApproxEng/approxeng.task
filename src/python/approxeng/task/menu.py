@@ -84,8 +84,8 @@ class MenuTask(Task):
         :param world:
             Provides any resources needed to read the appropriate action
         :return:
-            None for no action, or an instance of MenuAction for navigation, or an int to immediately select that index
-            item.
+            None for no action, or an instance of :class:`~approxeng.task.menu.MenuAction` for navigation, or an int to
+            immediately select that index item.
         """
         pass
 
@@ -110,13 +110,13 @@ class MenuTask(Task):
 
 class KeyboardMenuTask(MenuTask):
     """
-    Not particularly clever implementation of MenuTask that uses print statements and input() to get menu choices. Has
-    the advantage of working with no additional resources, so handy for testing.
+    Not particularly clever implementation of :class:`~approxeng.task.menu.MenuTask` that uses print statements and
+    ``input()`` to get menu choices. Has the advantage of working with no additional resources, so handy for testing.
     """
 
     def get_menu_action(self, world):
         """
-        Print the menu, then prompt the user to select an index or, if parent is defined, 'u' to to up.
+        Print the menu, then prompt the user to select an index or, if parent is defined, ``u`` to to up.
         """
         print(self.title)
         print('=' * len(self.title))
@@ -134,7 +134,7 @@ class KeyboardMenuTask(MenuTask):
 
     def display_menu(self, world, title, item_title, item_index, item_count):
         """
-        Don't display here, because we block on input so if we did this 'properly' we'd end up waiting for the user
+        Don't display here, because we block on input so if we did this *properly* we'd end up waiting for the user
         to enter a response before then showing them the options. While this *is* amusing, it's probably not helpful.
         """
         pass

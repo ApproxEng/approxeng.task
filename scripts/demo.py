@@ -5,7 +5,8 @@ from time import sleep
 
 LOG = logging.getLogger('demo')
 
-#logging.basicConfig(level=logging.INFO)
+
+logging.basicConfig(level=logging.INFO)
 
 
 @resource(name='list_resource')
@@ -16,11 +17,16 @@ def bar():
 register_resource('string_resource', 'a value')
 
 
+@resource(name='dep_test_resource')
+def foo(list_resource):
+    return list(reversed(list_resource))
+
+
 @task(name='first_task')
-def root(list_resource, task_count):
+def root(dep_test_resource, task_count):
     sleep(0.1)
     LOG.info(task_count)
-    LOG.info(list_resource)
+    LOG.info(dep_test_resource)
     if task_count > 2:
         return 'second_task'
 

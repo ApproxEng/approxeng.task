@@ -63,7 +63,11 @@ class Task(ABC):
         """
 
         def __init__(self, resources, global_count, task_count):
-            self.dict = {task_resource: RESOURCES[task_resource].value() for task_resource in resources}
+            self.dict = {}
+            for resource_name in resources:
+                res = RESOURCES[resource_name]
+                dependency_values = {name: self.dict[name] for name in res.dependencies}
+                self.dict[resource_name] = res.value(**dependency_values)
             self.dict['global_count'] = global_count
             self.dict['task_count'] = task_count
 
@@ -98,6 +102,7 @@ class Task(ABC):
         self.active = False
         self.name = name
         self.task_count = 0
+        self.ordered_resources = None
 
     @property
     def resources(self):
@@ -106,7 +111,7 @@ class Task(ABC):
         containing all the registered resource names.
         """
         if self._resources is None:
-            return [task_resource for task_resource in RESOURCES]
+            return RESOURCES.keys()
         return self._resources
 
     def do_startup(self):
@@ -114,11 +119,12 @@ class Task(ABC):
         If this task is not currently active, call startup on any required resources, then call startup on the task
         implementation. No need to call this explicitly as it's called if the task isn't active on the first tick.
         """
+        self.ordered_resources = get_resource_total_order(self.resources)
         if self.active:
             LOG.warning('Task "%s" startup called but task already active', self.name)
         else:
             LOG.info('Task "%s" starting', self.name)
-            for task_resource in self.resources:
+            for task_resource in self.ordered_resources:
                 if task_resource not in RESOURCES:
                     raise TaskException('Required resource "{}" not defined'.format(task_resource))
                 RESOURCES[task_resource].startup()
@@ -132,7 +138,7 @@ class Task(ABC):
         if self.active:
             LOG.info('Task "%s" shutting down', self.name)
             self.shutdown()
-            for task_resource in self.resources:
+            for task_resource in reversed(self.ordered_resources):
                 RESOURCES[task_resource].shutdown()
             self.active = False
 
@@ -144,7 +150,9 @@ class Task(ABC):
             self.do_startup()
         LOG.debug('Task "%s", task_tick %i, global_tick %i', self.name, self.task_count, Task.global_count)
         return_value = self.tick(
-            world=Task.World(resources=self.resources, task_count=self.task_count, global_count=Task.global_count))
+            world=Task.World(resources=self.ordered_resources,
+                             task_count=self.task_count,
+                             global_count=Task.global_count))
         Task.global_count = Task.global_count + 1
         self.task_count = self.task_count + 1
         return return_value
@@ -199,35 +207,16 @@ class SimpleTask(Task):
         a task function.
 
         :param task_function:
-            A function, which may accept any or all of [state, world, count] parameters, and which will be called every
-            tick while this task is active.
-        :param resources:
-            A list of named resources to be supplied through the world parameter to the task function.
+            A function which will be called every tick while this task is active. If the function accepts parameters,
+            these are interpreted as the names of resources required by the task, and provided when the function is
+            called.
         :param name:
             The name of the task, this is only really used internally for logging, the canonical name is defined by the
             key under which the task is registered.
         """
 
-        resources = [key for key in inspect.signature(task_function).parameters.keys()]
-
-        # task_state isn't a normal world resource, we'll explicitly add it later but we don't want the framework
-        # to try to initialise it. Remove it from the list of resources if it's been specified and make a note that
-        # we did so so we know to add it back in later
-        if 'task_state' in resources:
-            resources.remove('task_state')
-            self.uses_state = True
-        else:
-            self.uses_state = False
-
-        # The world always contains task_count and global_count, but we may not want it to. Remember whether these are
-        # used for later.
-        self.use_task_count = 'task_count' in resources
-        self.use_global_count = 'global_count' in resources
-
-        if self.use_task_count:
-            resources.remove('task_count')
-        if self.use_global_count:
-            resources.remove('global_count')
+        self.all_args = list(inspect.signature(task_function).parameters.keys())
+        resources = [res for res in self.all_args if res not in ['task_state', 'task_count', 'global_count']]
 
         super(SimpleTask, self).__init__(resources=resources, name=name)
         self.task_function = task_function
@@ -254,17 +243,11 @@ class SimpleTask(Task):
         :return:
             The return value from the task function. As elsewhere, this is interpreted as follows:
             None - don't change anything, keep this task running, call it again
-            True - exit from the task processing loop, shutting down the process
+            TaskStop - exit from the task processing loop, shutting down the process
             Task or String - shut this task down, set the named or provided task as the current task
         """
-        if self.uses_state:
-            world.dict.update({'task_state': self.state})
-        if not self.use_task_count:
-            del world.dict['task_count']
-        if not self.use_global_count:
-            del world.dict['global_count']
-
-        return self.task_function(**world.dict)
+        world.dict.update({'task_state': self.state})
+        return self.task_function(**{name: world.dict[name] for name in world.dict if name in self.all_args})
 
 
 def register_task(name, value):
@@ -295,8 +278,22 @@ class Resource(ABC):
     resource has its shutdown function called.
     """
 
-    def __init__(self, name):
+    def __init__(self, name, dependencies=None):
+        """
+        :param name:
+            Name used when referencing this resource
+        :param dependencies:
+            Optional list of strings containing names of resources which this resource depends upon. This does a number
+            of things, firstly it determines the order of startup and shutdown (with resources being started after their
+            dependencies and shut down before them), and secondly it causes any specified dependencies to be provided
+            as parameters to the value(..) method.
+        """
+        self._dependencies = dependencies
         self.name = name
+
+    @property
+    def dependencies(self):
+        return [] if self._dependencies is None else self._dependencies
 
     @abstractmethod
     def startup(self):
@@ -316,7 +313,7 @@ class Resource(ABC):
         pass
 
     @abstractmethod
-    def value(self):
+    def value(self, **kwargs):
         """
         Get the value of the resource. The result of this will be passed to any tasks through the world object, or to
         any task functions requesting the resource through a named parameter.
@@ -324,14 +321,52 @@ class Resource(ABC):
         pass
 
 
+def get_resource_total_order(resources=None):
+    """
+    Resolve a set of resources into an ordering which respects any dependencies, this will also extend the supplied list
+    to include any transitive dependencies if required.
+
+    :param resources:
+        An iterable of resource names, or None to use all names
+    :return:
+        A list of resource names such that no resource depends on a resource later in the list
+    """
+
+    all_resources = list(resources) if resources is not None else list(RESOURCES.keys())
+    for name in all_resources:
+        res = RESOURCES[name]
+        if res.dependencies is not None:
+            for dep_name in res.dependencies:
+                if dep_name not in all_resources:
+                    LOG.info('Adding transitive dependency %s for %s', dep_name, name)
+                    all_resources.append(dep_name)
+
+    unresolved_names = set(all_resources)
+    resolved_names = []
+    while unresolved_names:
+        found_something = False
+        for name in unresolved_names:
+            res = RESOURCES[name]
+            if res.dependencies is None or all(dep_name in resolved_names for dep_name in res.dependencies):
+                LOG.info('Resolved ordering for %s', name)
+                resolved_names.append(name)
+                found_something = True
+        if not found_something:
+            message = 'Cyclic dependencies in requested resources {}'.format(resources)
+            LOG.error(message)
+            raise ValueError(message)
+        for name in resolved_names:
+            unresolved_names.discard(name)
+    return resolved_names
+
+
 class SimpleResource(Resource):
     """
-    Simple resource constructed with value, and optional setup / teardown functions. All these functions should be
-    no-argument ones.
+    Simple resource constructed with value, and optional setup / teardown functions.
     """
 
     def __init__(self, name, value_func, startup_func=None, shutdown_func=None):
-        super(SimpleResource, self).__init__(name=name)
+        super(SimpleResource, self).__init__(name=name, dependencies=inspect.signature(value_func).parameters.keys())
         self.value_func = value_func
         self.startup_func = startup_func
         self.shutdown_func = shutdown_func
@@ -344,8 +379,8 @@ class SimpleResource(Resource):
         if self.shutdown_func is not None:
             self.shutdown_func()
 
-    def value(self):
-        return self.value_func()
+    def value(self, **kwargs):
+        return self.value_func(**kwargs)
 
 
 def register_resource(name, value):
@@ -464,7 +499,7 @@ def run(root_task, error_task='exit', check_tasks=None, raise_exceptions=False):
                         return_value = response.return_value
             except Exception as e:
                 # Anything throwing an exception ends up here. Log it first, then delegate to a handler task
-                LOG.exception('Exception raised within task look')
+                LOG.exception('Exception raised within task loop')
                 # Shut the active task down, add the exception to the world as 'error' and launch the error task
                 active_task.do_shutdown()
                 if raise_exceptions:
@@ -476,11 +511,10 @@ def run(root_task, error_task='exit', check_tasks=None, raise_exceptions=False):
         return_value = te
     finally:
         # Finished, shut down all resources and exit
-        for res in RESOURCES:
+        for res in reversed(get_resource_total_order()):
             RESOURCES[res].shutdown()
     # If we're raising exceptions, and there was an exception, raise it.
     if raise_exceptions and isinstance(return_value, Exception):
         raise return_value
     # Otherwise return the return value and exit.
     return return_value
-
