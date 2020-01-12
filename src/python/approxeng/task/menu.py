@@ -175,8 +175,6 @@ def register_menu_tasks(menu_dict, menu_task_class=MenuTask, resources=None):
         parent = None
         if 'parent_task' in menu:
             parent = menu['parent_task']
-
-        print(f'{name}:"{title}"')
         task = menu_task_class(name=name, title=title, parent_task=parent, resources=resources)
         all_task_names.append(name)
         for item in menu['items']:
