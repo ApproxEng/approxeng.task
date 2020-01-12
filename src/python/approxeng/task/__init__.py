@@ -332,7 +332,8 @@ def get_resource_total_order(resources=None):
         A list of resource names such that no resource depends on a resource later in the list
     """
 
-    all_resources = list(resources) if resources is not None else list(RESOURCES.keys())
+    all_resources = list([res for res in resources if res in RESOURCES]) if resources is not None else list(
+        RESOURCES.keys())
     for name in all_resources:
         res = RESOURCES[name]
         if res.dependencies is not None:

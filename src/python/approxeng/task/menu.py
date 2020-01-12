@@ -54,11 +54,11 @@ class MenuTask(Task):
         if action is not None:
             if action is MenuAction.next:
                 LOG.debug('Menu action = next')
-                self.item_index = (self.item_index + 1) % (len(self.items) - 1)
+                self.item_index = (self.item_index + 1) % len(self.items)
                 self.display_update = True
             elif action is MenuAction.previous:
                 LOG.debug('Menu action = previous')
-                self.item_index = (self.item_index - 1) % (len(self.items) - 1)
+                self.item_index = (self.item_index - 1) % len(self.items)
                 self.display_update = True
             elif action is MenuAction.select:
                 LOG.debug('Menu action = select')

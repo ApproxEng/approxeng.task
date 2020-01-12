@@ -1,9 +1,34 @@
 from approxeng.input.selectbinder import ControllerResource
 from time import sleep
 from approxeng.task import task, run, register_resource
-from approxeng.task.menu import register_menu_tasks_from_yaml
+from approxeng.task.menu import register_menu_tasks_from_yaml, MenuTask, MenuAction
+from redboard import RedBoard, Display
 
-register_menu_tasks_from_yaml(filename='robot_menu.yaml')
+
+class MenuControllerTask(MenuTask):
+    """
+    Use a connected gamepad as menu navigation, write out menus to the redboard's display module
+    """
+
+    def get_menu_action(self, world):
+        if 'dleft' in world.joystick.presses:
+            return MenuAction.previous
+        if 'dright' in world.joystick.presses:
+            return MenuAction.next
+        if 'cross' in world.joystick.presses:
+            return MenuAction.select
+        if 'dup' in world.joystick.presses:
+            return MenuAction.up
+
+    def display_menu(self, world, title, item_title, item_index, item_count):
+        pass
+
+
+# Redboard motor object as 'motors'
+register_resource('motors', RedBoard())
+# Menu tasks from the yaml file
+register_menu_tasks_from_yaml(filename='robot_menu.yaml', menu_task_class=MenuControllerTask,
+                              resources=['joystick', 'display'])
 
 while True:
     try:
