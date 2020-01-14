@@ -2,7 +2,7 @@ import uuid
 import copy
 import logging
 import yaml
-from approxeng.task import register_task, Task
+from approxeng.task import register_task, Task, TaskStop
 from enum import Enum, unique
 from abc import abstractmethod
 
@@ -41,7 +41,6 @@ class MenuTask(Task):
     def startup(self):
         """
         :internal:
-        :return:
         """
         self.item_index = 0
         self.display_update = True
@@ -140,31 +139,54 @@ class KeyboardMenuTask(MenuTask):
         pass
 
 
+def unique_id(prefix):
+    return prefix + '_' + str(uuid.uuid4())
+
+
 def register_menu_tasks_from_yaml(filename, menu_task_class=MenuTask, resources=None):
     """
 
     :param filename:
+        Filename of a YAML file, should contain a top level list as defined in :ref:`menu_structure`.
     :param menu_task_class:
+        The subclass of :class:`~approxeng.task.menu.MenuTask` to be used when displaying and navigating the resultant
+        menus. Instances of this task will be constructed for each menu in the menu_dicts input.
     :param resources:
+        A list of names of resources which should be made available to the menu task instances. These are generally
+        going to be a display and some kind of input facility and will be used when displaying and receiving navigation
+        instructions.
     :return:
+        A list of all the new task names created. Task names which are created dynamically are included, these will
+        appear if you have any nested (anonymous) menus, or any return values as both of these are mapped to new tasks
+        which have to be named on the fly to ensure uniqueness.
     """
     with open(filename, 'r') as stream:
         try:
-            menu_dict = yaml.safe_load(stream)
-            return register_menu_tasks(menu_dict=menu_dict, menu_task_class=menu_task_class, resources=resources)
+            menu_dicts = yaml.safe_load(stream)
+            return register_menu_tasks(menu_dicts=menu_dicts, menu_task_class=menu_task_class, resources=resources)
         except yaml.YAMLError as exc:
             LOG.error('Unable to load YAML from %s', filename, exc_info=True)
 
 
-def register_menu_tasks(menu_dict, menu_task_class=MenuTask, resources=None):
+def register_menu_tasks(menu_dicts, menu_task_class=MenuTask, resources=None):
     """
 
-    :param menu_dict:
+    :param menu_dicts:
+        A sequence of dicts, each of which defines a menu. Each menu follows the structure described in
+        :ref:`menu_structure`.
     :param menu_task_class:
+        The subclass of :class:`~approxeng.task.menu.MenuTask` to be used when displaying and navigating the resultant
+        menus. Instances of this task will be constructed for each menu in the menu_dicts input.
     :param resources:
-    :return:
+        A list of names of resources which should be made available to the menu task instances. These are generally
+        going to be a display and some kind of input facility and will be used when displaying and receiving navigation
+        instructions.
+    :returns:
+        A list of all the new task names created. Task names which are created dynamically are included, these will
+        appear if you have any nested (anonymous) menus, or any return values as both of these are mapped to new tasks
+        which have to be named on the fly to ensure uniqueness.
     """
-    menus = copy.deepcopy(menu_dict)
+    menus = copy.deepcopy(menu_dicts)
     all_task_names = []
     for menu in menus:
         # Internal name for the menu task
@@ -179,8 +201,11 @@ def register_menu_tasks(menu_dict, menu_task_class=MenuTask, resources=None):
         all_task_names.append(name)
         for item in menu['items']:
             if 'menu' in item:
-                # Nested menu, expand it out
-                new_task_id = 'menu_task_' + uuid.uuid1().hex
+                # Nested menu, expand it out, rewrite the item to reference the id of a newly created menu task
+                # and append the new menu task definition to the end of the array of menus so we'll create it
+                # later. This may in turn create more sub-menus, in effect doing a breadth first traversal of any
+                # tree structure defined in the input.
+                new_task_id = unique_id('menu_task')
                 sub_menu_dict = item['menu']
                 sub_menu_dict['name'] = new_task_id
                 sub_menu_dict['parent_task'] = name
@@ -188,8 +213,33 @@ def register_menu_tasks(menu_dict, menu_task_class=MenuTask, resources=None):
                 item['title'] = sub_menu_dict['title']
                 item['task'] = new_task_id
                 menus.append(sub_menu_dict)
+            if 'title' in item and 'return' in item:
+                # Build a new task which returns the given return value wrapped in a TaskStop,
+                # this will cause the run(..) loop to exit and return the given value. Use this
+                # if you want to return a value from a menu structure.
+
+                return_task_name = unique_id('menu_return_task')
+
+                def build_return_task(the_return_value):
+                    # Enforce local re-scope of the return value, if we declare it outside this function it'll
+                    # be local to the register_menu_tasks and so our newly generated tasks will always return the
+                    # most recently specified value, which isn't at all what we want!
+                    def return_task():
+                        """
+                        Return a :class:`~approxeng.task.TaskStop`, this will break out of the loop and cause the
+                        :func:`~approxeng.task.run` function to return the wrapped value.
+                        """
+                        return TaskStop(the_return_value)
+
+                    return return_task
+
+                register_task(return_task_name, build_return_task(item.pop('return')))
+                item['task'] = return_task_name
             if 'title' in item and 'task' in item:
-                # Titled task item, add it to the menu
+                # Titled task item, add it to the menu. This is 'if' rather than 'elif' because if we hit the previous
+                # case where we're adding a menu, this node was re-written to now contain title and task rather than
+                # menu, so we want to add the corresponding task item.
                 task.add_item(title=item['title'], task_name=item['task'])
+
         register_task(name=name, value=task)
     return all_task_names

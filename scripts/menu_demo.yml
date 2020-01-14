@@ -5,6 +5,10 @@
       task: sub_menu
     - title: Sub Menu 2
       task: sub_menu_2
+    - title: Return a value
+      return: some_string
+    - title: Return a number
+      return: 1
 
 - name: sub_menu
   title: Sub Menu 1
