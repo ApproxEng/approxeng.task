@@ -101,6 +101,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#simple-tasks">Simple Tasks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#simple-stateful-tasks-and-task-counts">Simple Stateful Tasks and Task Counts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#switching-tasks">Switching Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pre-task-functions">Pre-task Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -387,6 +388,78 @@ the wrapped value will be returned by the <a class="reference internal" href="ap
 </div></blockquote>
 <p>So in this case, the light_monitor waits for the light to get really bright, then switches control to the ‘run_away’
 task, which in turn waits for the light to get nice and dim and hands back control to the monitor.</p>
+</div>
+<div class="section" id="pre-task-functions">
+<h3>Pre-task Functions<a class="headerlink" href="#pre-task-functions" title="Permalink to this headline">¶</a></h3>
+<p>There might be some things you want to do before a task runs which are universal - they should always run no matter
+what task is active. This could be used for a few things:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Setting up a resource to the correct state. For example, the <code class="docutils literal notranslate"><span class="pre">approxeng.input</span></code> controller instances should have
+their check_presses() method called before any task checks for button presses.</p></li>
+<li><p>Adding universal fault handling, for example checking that a controller is still connected.</p></li>
+<li><p>Adding universal behaviours, such as always shutting down motors and bouncing to the main menu if the user presses
+the home button on a connected controller.</p></li>
+</ul>
+</div></blockquote>
+<p>To do this you can register any number of no-argument functions when you call the <a class="reference internal" href="api.html#approxeng.task.run" title="approxeng.task.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> function.
+The example below is from some code I wrote to drive a simple robot around, and shows a pre-task function that does
+all the things listed above:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loop forever until a task exits for a reason other than disconnection</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">ControllerResource</span><span class="p">()</span> <span class="k">as</span> <span class="n">joystick</span><span class="p">:</span>
+
+            <span class="c1"># Tell the task system about the joystick</span>
+            <span class="n">register_resource</span><span class="p">(</span><span class="s1">&#39;joystick&#39;</span><span class="p">,</span> <span class="n">joystick</span><span class="p">)</span>
+
+
+            <span class="k">def</span> <span class="nf">check_joystick</span><span class="p">():</span>
+                <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                Called before every tick, sets up button presses, checks for joystick</span>
+<span class="sd">                disconnection, and bounces back to the home menu via a motor shutdown</span>
+<span class="sd">                task if the home button is pressed.</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">joystick</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">TaskStop</span><span class="p">(</span><span class="s1">&#39;disconnection&#39;</span><span class="p">)</span>
+                <span class="n">joystick</span><span class="o">.</span><span class="n">check_presses</span><span class="p">()</span>
+                <span class="k">if</span> <span class="s1">&#39;home&#39;</span> <span class="ow">in</span> <span class="n">joystick</span><span class="o">.</span><span class="n">presses</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s1">&#39;stop&#39;</span>
+
+
+            <span class="c1"># Run the task loop</span>
+            <span class="n">exit_reason</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">root_task</span><span class="o">=</span><span class="s1">&#39;main_menu&#39;</span><span class="p">,</span>
+                              <span class="n">error_task</span><span class="o">=</span><span class="s1">&#39;stop&#39;</span><span class="p">,</span>
+                              <span class="n">check_tasks</span><span class="o">=</span><span class="p">[</span><span class="n">check_joystick</span><span class="p">])</span>
+
+            <span class="c1"># If we disconnected then wait for reconnection, otherwise break out</span>
+            <span class="c1"># and exit the script.</span>
+            <span class="k">if</span> <span class="n">exit_reason</span> <span class="ow">is</span> <span class="ow">not</span> <span class="s1">&#39;disconnection&#39;</span><span class="p">:</span>
+                <span class="k">break</span>
+
+    <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+        <span class="c1"># Raised if there&#39;s no available controller, display this information</span>
+        <span class="n">display</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">line1</span><span class="o">=</span><span class="s1">&#39;Simple Robot Script&#39;</span><span class="p">,</span> <span class="n">line3</span><span class="o">=</span><span class="s1">&#39;Waiting for Controller&#39;</span><span class="p">)</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">check_tasks</span></code> parameter of the <a class="reference internal" href="api.html#approxeng.task.run" title="approxeng.task.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> function, if specified, takes an array of functions
+which will be run in sequence immediately before the <a class="reference internal" href="api.html#approxeng.task.Task.tick" title="approxeng.task.Task.tick"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tick()</span></code></a> is called on a
+<a class="reference internal" href="api.html#approxeng.task.Task" title="approxeng.task.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a>. If any of these functions return a value, the actual task is skipped and the return value
+is treated exactly the way it would have been treated if returned from the task. So, in the example above there are
+three possible outcomes of the <code class="docutils literal notranslate"><span class="pre">check_joystick</span></code> function:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If the joystick is connected, and <code class="docutils literal notranslate"><span class="pre">home</span></code> hasn’t been pressed, it doesn’t return a value and the task will be run
+as normal.</p></li>
+<li><p>If the joystick is not connected, it returns a <a class="reference internal" href="api.html#approxeng.task.TaskStop" title="approxeng.task.TaskStop"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskStop</span></code></a>, wrapping the string
+<code class="docutils literal notranslate"><span class="pre">disconnection</span></code>. This causes the call to <a class="reference internal" href="api.html#approxeng.task.run" title="approxeng.task.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> to complete and return that string, which is
+then handled to break out of the inner loop and go back to waiting for a joystick connection.</p></li>
+<li><p>If the joystick is connected and <code class="docutils literal notranslate"><span class="pre">home</span></code> has been pressed, return the string <code class="docutils literal notranslate"><span class="pre">stop</span></code>. This is treated as the name
+of a task, and will switch control to the <code class="docutils literal notranslate"><span class="pre">stop</span></code> task - in this case this should probably shut the motors down and
+then bounce back to the main menu, but the details aren’t important here.</p></li>
+</ul>
+</div></blockquote>
 </div>
 </div>
 </div>
