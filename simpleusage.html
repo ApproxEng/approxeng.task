@@ -101,9 +101,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#simple-tasks">Simple Tasks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#simple-stateful-tasks-and-task-counts">Simple Stateful Tasks and Task Counts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#switching-tasks">Switching Tasks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pre-task-functions">Pre-task Functions</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-task-functions">Pre-task Functions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="menu.html">Menu Generation</a></li>
@@ -389,8 +389,9 @@ the wrapped value will be returned by the <a class="reference internal" href="ap
 <p>So in this case, the light_monitor waits for the light to get really bright, then switches control to the ‘run_away’
 task, which in turn waits for the light to get nice and dim and hands back control to the monitor.</p>
 </div>
+</div>
 <div class="section" id="pre-task-functions">
-<h3>Pre-task Functions<a class="headerlink" href="#pre-task-functions" title="Permalink to this headline">¶</a></h3>
+<h2>Pre-task Functions<a class="headerlink" href="#pre-task-functions" title="Permalink to this headline">¶</a></h2>
 <p>There might be some things you want to do before a task runs which are universal - they should always run no matter
 what task is active. This could be used for a few things:</p>
 <blockquote>
@@ -460,7 +461,6 @@ of a task, and will switch control to the <code class="docutils literal notransl
 then bounce back to the main menu, but the details aren’t important here.</p></li>
 </ul>
 </div></blockquote>
-</div>
 </div>
 </div>
 

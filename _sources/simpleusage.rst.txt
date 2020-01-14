@@ -239,7 +239,7 @@ So in this case, the light_monitor waits for the light to get really bright, the
 task, which in turn waits for the light to get nice and dim and hands back control to the monitor.
 
 Pre-task Functions
-******************
+------------------
 
 There might be some things you want to do before a task runs which are universal - they should always run no matter
 what task is active. This could be used for a few things:
