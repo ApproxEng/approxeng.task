@@ -114,8 +114,8 @@ The following will produce the same menu structure as the previous example, but 
 With a nested definition like this you don't have to define the *back* task, as the menu system knows what the parent
 menu is and handles it with a special *up* action.
 
-Returning Value from a Menu
-***************************
+Returning a Value from a Menu
+*****************************
 
 If a task returns :class:`~approxeng.task.TaskStop` when called, the :func:`~approxeng.task.run` function will return
 the value wrapped in the :class:`~approxeng.task.TaskStop`. If we wanted to use the menu system to get user input we
