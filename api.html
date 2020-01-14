@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API &mdash; Approximate Engineering - Task 0.0.5 documentation</title>
+  <title>API &mdash; Approximate Engineering - Task 0.1.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
 
     
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Approximate Engineering - Task 0.0.5 documentation"
+          title="Search within Approximate Engineering - Task 0.1.0 documentation"
           href="_static/opensearch.xml"/>
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.0.5
+                0.1.0
               </div>
             
           
@@ -599,9 +599,6 @@ immediately select that index item.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Internal</dt>
 <dd class="field-odd"><p></p></dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -628,17 +625,23 @@ which gracefully shuts down your hardware before exiting from the loop.</p>
 
 <dl class="function">
 <dt id="approxeng.task.menu.register_menu_tasks">
-<code class="sig-prename descclassname">approxeng.task.menu.</code><code class="sig-name descname">register_menu_tasks</code><span class="sig-paren">(</span><em class="sig-param">menu_dict</em>, <em class="sig-param">menu_task_class=&lt;class 'approxeng.task.menu.MenuTask'&gt;</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#register_menu_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.register_menu_tasks" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">approxeng.task.menu.</code><code class="sig-name descname">register_menu_tasks</code><span class="sig-paren">(</span><em class="sig-param">menu_dicts</em>, <em class="sig-param">menu_task_class=&lt;class 'approxeng.task.menu.MenuTask'&gt;</em>, <em class="sig-param">resources=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/approxeng/task/menu.html#register_menu_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#approxeng.task.menu.register_menu_tasks" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>menu_dict</strong> – </p></li>
-<li><p><strong>menu_task_class</strong> – </p></li>
-<li><p><strong>resources</strong> – </p></li>
+<li><p><strong>menu_dicts</strong> – A sequence of dicts, each of which defines a menu. Each menu follows the structure described in
+<a class="reference internal" href="menu.html#menu-structure"><span class="std std-ref">Menu Definitions</span></a>.</p></li>
+<li><p><strong>menu_task_class</strong> – The subclass of <a class="reference internal" href="#approxeng.task.menu.MenuTask" title="approxeng.task.menu.MenuTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">MenuTask</span></code></a> to be used when displaying and navigating the resultant
+menus. Instances of this task will be constructed for each menu in the menu_dicts input.</p></li>
+<li><p><strong>resources</strong> – A list of names of resources which should be made available to the menu task instances. These are generally
+going to be a display and some kind of input facility and will be used when displaying and receiving navigation
+instructions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>A list of all the new task names created. Task names which are created dynamically are included, these will
+appear if you have any nested (anonymous) menus, or any return values as both of these are mapped to new tasks
+which have to be named on the fly to ensure uniqueness.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -649,13 +652,18 @@ which gracefully shuts down your hardware before exiting from the loop.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> – </p></li>
-<li><p><strong>menu_task_class</strong> – </p></li>
-<li><p><strong>resources</strong> – </p></li>
+<li><p><strong>filename</strong> – Filename of a YAML file, should contain a top level list as defined in <a class="reference internal" href="menu.html#menu-structure"><span class="std std-ref">Menu Definitions</span></a>.</p></li>
+<li><p><strong>menu_task_class</strong> – The subclass of <a class="reference internal" href="#approxeng.task.menu.MenuTask" title="approxeng.task.menu.MenuTask"><code class="xref py py-class docutils literal notranslate"><span class="pre">MenuTask</span></code></a> to be used when displaying and navigating the resultant
+menus. Instances of this task will be constructed for each menu in the menu_dicts input.</p></li>
+<li><p><strong>resources</strong> – A list of names of resources which should be made available to the menu task instances. These are generally
+going to be a display and some kind of input facility and will be used when displaying and receiving navigation
+instructions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
+<dd class="field-even"><p>A list of all the new task names created. Task names which are created dynamically are included, these will
+appear if you have any nested (anonymous) menus, or any return values as both of these are mapped to new tasks
+which have to be named on the fly to ensure uniqueness.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -684,7 +692,7 @@ which gracefully shuts down your hardware before exiting from the loop.</p>
     <p>
         &copy; Copyright 2019, 2020 Tom Oinn
       <span class="lastupdated">
-        Last updated on Jan 11, 2020.
+        Last updated on Jan 14, 2020.
       </span>
 
     </p>

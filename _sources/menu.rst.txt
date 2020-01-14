@@ -28,6 +28,8 @@ To activate a menu, just switch active task to the name of the menu. This is pro
 in most robots, but you might want to explicitly activate them at other times - there's no limit to the number of menus
 you can have, and there's nothing special about the root one, that's just the task you choose to start with.
 
+.. _menu_structure:
+
 Menu Definitions
 ----------------
 
@@ -112,6 +114,33 @@ The following will produce the same menu structure as the previous example, but 
 With a nested definition like this you don't have to define the *back* task, as the menu system knows what the parent
 menu is and handles it with a special *up* action.
 
+Returning Value from a Menu
+***************************
+
+If a task returns :class:`~approxeng.task.TaskStop` when called, the :func:`~approxeng.task.run` function will return
+the value wrapped in the :class:`~approxeng.task.TaskStop`. If we wanted to use the menu system to get user input we
+could therefore define a set of :class:`~approxeng.task.Task` instances, or equivalent functions decorated with ``task``
+to return different values, and then reference those tasks from the menu structure. This would be very clunky though,
+and it's a sufficiently common case that the library supports it directly.
+
+If you create a menu such as:
+
+.. code-block:: yaml
+
+    - name: top_menu
+      title: Main Menu
+      items:
+        - title: Return Foo
+          return: Foo
+        - title: Return Bar
+          return: Bar
+
+This will automatically create two new tasks, each of which simply returns a :class:`~approxeng.task.TaskStop` wrapping
+the two strings ``Foo`` and ``Bar`` respectively, and rewrites the menu structure so that these new tasks are called
+when those options are selected.
+
+These three kinds of things (tasks, sub-menus, and return values) can be freely mixed in any menu, the library will do
+the appropriate thing in each case.
 
 Implementing a MenuTask
 -----------------------

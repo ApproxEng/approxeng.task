@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Menu Generation &mdash; Approximate Engineering - Task 0.0.5 documentation</title>
+  <title>Menu Generation &mdash; Approximate Engineering - Task 0.1.0 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
 
     
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Search within Approximate Engineering - Task 0.0.5 documentation"
+          title="Search within Approximate Engineering - Task 0.1.0 documentation"
           href="_static/opensearch.xml"/>
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                0.0.5
+                0.1.0
               </div>
             
           
@@ -94,6 +94,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#menu-definitions">Menu Definitions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#multiple-menus">Multiple Menus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#more-concise-nested-menus">More Concise Nested Menus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#returning-value-from-a-menu">Returning Value from a Menu</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#implementing-a-menutask">Implementing a MenuTask</a></li>
@@ -192,7 +193,7 @@ class needs to function, this works the same way as for any other task (the menu
 in most robots, but you might want to explicitly activate them at other times - there’s no limit to the number of menus
 you can have, and there’s nothing special about the root one, that’s just the task you choose to start with.</p>
 <div class="section" id="menu-definitions">
-<h2>Menu Definitions<a class="headerlink" href="#menu-definitions" title="Permalink to this headline">¶</a></h2>
+<span id="menu-structure"></span><h2>Menu Definitions<a class="headerlink" href="#menu-definitions" title="Permalink to this headline">¶</a></h2>
 <p>We’ll use YAML syntax here, but you can also build dictionaries directly (YAML is more concise, and easier to edit than
 a Python dict). Firstly the most simple definition - a single menu which will give the user the option to launch one of
 two tasks:</p>
@@ -266,6 +267,29 @@ can’t manually activate that sub-menu. Not an issue here, if you need to do th
 </div>
 <p>With a nested definition like this you don’t have to define the <em>back</em> task, as the menu system knows what the parent
 menu is and handles it with a special <em>up</em> action.</p>
+</div>
+<div class="section" id="returning-value-from-a-menu">
+<h3>Returning Value from a Menu<a class="headerlink" href="#returning-value-from-a-menu" title="Permalink to this headline">¶</a></h3>
+<p>If a task returns <a class="reference internal" href="api.html#approxeng.task.TaskStop" title="approxeng.task.TaskStop"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskStop</span></code></a> when called, the <a class="reference internal" href="api.html#approxeng.task.run" title="approxeng.task.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> function will return
+the value wrapped in the <a class="reference internal" href="api.html#approxeng.task.TaskStop" title="approxeng.task.TaskStop"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskStop</span></code></a>. If we wanted to use the menu system to get user input we
+could therefore define a set of <a class="reference internal" href="api.html#approxeng.task.Task" title="approxeng.task.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a> instances, or equivalent functions decorated with <code class="docutils literal notranslate"><span class="pre">task</span></code>
+to return different values, and then reference those tasks from the menu structure. This would be very clunky though,
+and it’s a sufficiently common case that the library supports it directly.</p>
+<p>If you create a menu such as:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">top_menu</span>
+  <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Main Menu</span>
+  <span class="nt">items</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Return Foo</span>
+      <span class="nt">return</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Foo</span>
+    <span class="p p-Indicator">-</span> <span class="nt">title</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Return Bar</span>
+      <span class="nt">return</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Bar</span>
+</pre></div>
+</div>
+<p>This will automatically create two new tasks, each of which simply returns a <a class="reference internal" href="api.html#approxeng.task.TaskStop" title="approxeng.task.TaskStop"><code class="xref py py-class docutils literal notranslate"><span class="pre">TaskStop</span></code></a> wrapping
+the two strings <code class="docutils literal notranslate"><span class="pre">Foo</span></code> and <code class="docutils literal notranslate"><span class="pre">Bar</span></code> respectively, and rewrites the menu structure so that these new tasks are called
+when those options are selected.</p>
+<p>These three kinds of things (tasks, sub-menus, and return values) can be freely mixed in any menu, the library will do
+the appropriate thing in each case.</p>
 </div>
 </div>
 <div class="section" id="implementing-a-menutask">
@@ -419,7 +443,7 @@ class (so no brackets!).</p>
     <p>
         &copy; Copyright 2019, 2020 Tom Oinn
       <span class="lastupdated">
-        Last updated on Jan 11, 2020.
+        Last updated on Jan 14, 2020.
       </span>
 
     </p>
