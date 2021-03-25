@@ -12,7 +12,7 @@ setup(
     author_email='tomoinn@gmail.com',
     license='ASL2.0',
     packages=find_namespace_packages(),
-    install_requires=['pyyaml==5.3'],
+    install_requires=['pyyaml==5.4'],
     include_package_data=True,
     dependency_links=[],
     zip_safe=False)
